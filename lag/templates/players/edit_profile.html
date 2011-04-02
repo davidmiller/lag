@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block main %}
+<form enctype="multipart/form-data" method="POST" id="edit_form" action=".">
+  {{form.as_p}}
+  {% csrf_token %}
+  <input type="submit" name="submit" value="Save" />
+</form>
+{% endblock %}
+{% block resources %}
+<h3>Current Profile Sidebar:</h3>
+<p>
+  Some stuff here
+</p>
+{% endblock %}

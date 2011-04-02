@@ -1,0 +1,81 @@
+/* --------------------------------------------------------------
+
+   Boilerplate Screen Styles
+   * Version:   0.5 (2007-11-19)
+
+-------------------------------------------------------------- */
+
+@import "lib/reset.css";
+@import "lib/typography.css";
+@import "lib/forms.css";
+@import "lib/plugins/tabs.css";
+
+/* Reset Classes
+-------------------------------------------------------------- */
+.clear{ clear: both; }
+
+/* Page
+-------------------------------------------------------------- */
+
+#page { margin: 0 auto; width: 950px; }
+
+
+/* Header
+-------------------------------------------------------------- */
+
+#header { margin-top: 20px; border-bottom: 1px solid #ddd; }
+#header a h1 { color: #000; }
+#header h1{ display: inline-block; width: 400px;}
+#header h2 {display: inline-block; width: 200px;}#header .tabs { width: 610px;}
+#header .tabs li { margin-right: 1px; }
+#header .tabs a { padding: 5px 15px; background: #ddd; color: #666; text-decoration: none; }
+
+#login{ float: right; margin-top: -20px;}
+
+/* Body
+-------------------------------------------------------------- */
+
+#body { margin-top: 20px; }
+
+#main { float: left; width: 480px; margin-right: 130px; }
+#main h2{ clear: both; border-bottom: solid 1px #888}
+
+#resources { float: left; width: 230px; }
+#resources h3 { color: #888; }
+#resources ul, #resources ol { color: #888; }
+#resources ul a { color: #555; }
+/* sections
+-------------------------------------------------------------- */
+.section{ clear: both; border-bottom: 1px solid #888; }
+
+/* Items
+-------------------------------------------------------------- */
+
+.item-list{
+    width: 210px;
+    margin: 10px 10px 10px 0px;
+    float: left;
+    padding: 3px;
+    margin: 1px solid grey;
+}
+
+/* Footer
+-------------------------------------------------------------- */
+#footer { border-top: 1px solid #eee; margin-top: 20px; }
+
+#footer .tabs { width: 405px; border-top: 3px solid #eee; }
+#footer .tabs a {
+    padding: 10px 30px 10px 0;
+    color: #666;
+    text-decoration: none;
+}
+
+
+/* Forms
+-------------------------------------------------------------- */
+.errorlist li { color: #FF0000; font-weight: bold; list-style-type: none; }
+
+
+/* Profile
+-------------------------------------------------------------- */
+.long-bio{ clear: both;}

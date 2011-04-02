@@ -5,3 +5,4 @@ eggs/*
 *flymake.py
 parts/*
 .installed.cfg
+*.pyc

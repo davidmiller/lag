@@ -1,0 +1,11 @@
+{% extends 'base.html'  %}
+{% block main %}
+<form method="POST" id="" action=".">
+  <fieldset>
+    <legend>Register</legend>
+    {{ form.as_p }}
+  </fieldset>
+  <input type="submit" name="" value="Register" />
+  {% csrf_token %}
+</form>
+{% endblock %}

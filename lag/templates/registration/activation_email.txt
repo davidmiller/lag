@@ -1,0 +1,1 @@
+Go forth and activate with http://lag.larapel.com/accounts/activate/{{activation_key}}/

@@ -1,0 +1,70 @@
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Larapel</title>
+    <meta name="author" content="David Miller">
+    {% block styles %}
+    <link rel="stylesheet" href="{{STATIC_PREFIX}}css/screen.css" type="text/css" media="screen" />
+    {% endblock %}
+    {% block scripts %}
+    <script type="text/javascript" src="{{STATIC_PREFIX}}js/lib/jquery.js"></script>
+    <script type="text/javascript" src="{{STATIC_PREFIX}}js/lib/gears_init.js"></script>
+    <script type="text/javascript" src="{{STATIC_PREFIX}}js/lib/geo.js"></script>
+    <script type="text/javascript" src="{{STATIC_PREFIX}}js/locate.js"></script>
+    {% endblock %}
+    {% block rss %}{% endblock %}
+    {% block extrahead %}{% endblock %}
+  </head>
+  <body>
+
+    <div id="page">
+      <div id="header">
+        <a href="/">
+          <h1>LAG.com</h1>
+        </a>
+        <ul class="tabs">
+          {% block tabs %}
+          {% if user.is_authenticated %}
+          <li><a href="/home/">Home</a></li>
+          {% endif %}
+          {% endblock %}
+        </ul>
+        <div id="login">
+        {% block login %}
+        {% if user.is_authenticated %}
+        Hi <a href="/home/">{{ user }}</a> |
+        {% else %}
+        <a href="/accounts/login/">Login</a> |
+        <a href="/accounts/register/">Register</a>
+        {% endif %}
+        {% endblock %}
+        </div><!--login-->
+      </div>
+
+      <div id="body" class="wrapper">
+        <div id="main">
+        {% block main %}{% endblock main %}
+        </div>
+        <div id="resources">
+        {% block resources %}{% endblock %}
+        </div>
+      </div>
+
+      <div id="footer">
+        <ul class="tabs">
+          <li><a href="/home/">Home</a></li>
+        </ul>
+
+        <p class="quiet">
+          <small>
+            Another <a href="http://www.deadpansincerity.com">Deadpan Sincerity</a> production
+          </small>
+        </p>
+      </div>
+    </div>
+
+  </body>
+</html>
