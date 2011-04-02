@@ -1,0 +1,7 @@
+bin/*
+develop-eggs/*
+downloads/*
+eggs/*
+*flymake.py
+parts/*
+.installed.cfg
