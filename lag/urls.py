@@ -9,6 +9,7 @@ urlpatterns = patterns(
     '',
     (r'^home/$', 'players.views.home'),
     (r'^edit-profile/$', 'players.views.edit_profile'),
+    (r'^logger/$', 'locations.views.logger'),
     (r'^locations/', include('locations.urls')),
     (r'^$', 'lag.views.homepage'),
     (r'^accounts/', include('registration.urls')),

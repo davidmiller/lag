@@ -1,6 +1,9 @@
+import os
 from datetime import date
 import json
+import pickle
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
@@ -27,3 +30,11 @@ def checkin(request):
                   visit_count=checkin.visits,
                   last_visited=checkin.last_visited.strftime("%Y-%m-%d"))
     return HttpResponse(json.dumps(params))
+
+def logger(request):
+    """
+    Shall we just serialise everything to a file?
+    """
+    with open(os.path.join(settings.ROOT, 'post.log'), 'a') as logfile:
+        logfile.write(json.dumps(request.POST)+"\n")
+    return HttpResponse('Yes')
