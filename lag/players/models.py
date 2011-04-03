@@ -5,9 +5,9 @@ from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.db import models
 
-from lag.registration.backends.default import (DefaultBackend as
+from registration.backends.default import (DefaultBackend as
                                            RegistrationBackend)
-from lag.registration.signals import user_activated
+from registration.signals import user_activated
 
 class Player(models.Model):
     """
@@ -52,6 +52,7 @@ def create_player(sender, user, request, **kwargs):
     """
     player = Player(user=user)
     player.save()
+    user.backend = 'django.contrib.auth.backends.ModelBackend'
     login(request, user)
     return player
 

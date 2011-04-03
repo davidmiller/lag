@@ -26,6 +26,4 @@ def checkin(request):
     params = dict(place=place.name, creator=place.created_by,
                   visit_count=checkin.visits,
                   last_visited=checkin.last_visited.strftime("%Y-%m-%d"))
-    out = json.dumps(params)
-    print out
-    return HttpResponse(out)
+    return HttpResponse(json.dumps(params))

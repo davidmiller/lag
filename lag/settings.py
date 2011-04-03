@@ -20,11 +20,11 @@ BUILDOUT_ROOT = ROOT.parent
 MEDIA_ROOT = ROOT.child('static')
 STATICFILES_DIRS = (
     MEDIA_ROOT,
-
     )
 STATIC_URL = '/m/'
 ADMIN_MEDIA_PREFIX = '/m/admin/'
-
+if HOSTNAME == 'bosch':
+    ADMIN_MEDIA_PREFIX = '/media/'
 # Debug
 DEBUG = False
 if HOSTNAME in DEBUG_HOSTS:

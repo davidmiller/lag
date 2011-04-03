@@ -21,11 +21,13 @@ class Place(models.Model):
     name = models.CharField(max_length=200, null=True)
     lat = models.FloatField()
     lon = models.FloatField()
-    region = models.ForeignKey(Region, null=True)
-    created_by = models.ForeignKey('players.Player', null=True)
+    region = models.ForeignKey(Region, null=True, blank=True)
+    created_by = models.ForeignKey('players.Player', null=True, blank=True)
 
     def __unicode__(self):
-        return self.name
+        if self.name:
+            return self.name
+        return "Place: %s %s" % (self.lat, self.lon)
 
 class Checkin(models.Model):
     """
