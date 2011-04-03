@@ -22,7 +22,6 @@ def render_to(template):
             if not isinstance(output, dict):
                 return output
             context = RequestContext(request)
-            print template
             return render_to_response(template,
                                       output,
                                       context_instance=context)

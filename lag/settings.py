@@ -9,7 +9,7 @@ MANAGERS = ADMINS
 
 HOSTNAME = gethostname()
 PSQL_HOSTS = ['bosch', 'parmenides']
-DEBUG_HOSTS = ['parmenides', 'jung', 'rasputin']
+DEBUG_HOSTS = ['parmenides', 'jung', 'rasputin', 'bosch']
 
 # Paths
 ROOT = Path(__file__).parent
@@ -97,8 +97,9 @@ INSTALLED_APPS = (
     'south',
     'django_mobile',
     'lag.registration',
-    'lag.locations',
     'lag.players',
+    'lag.locations',
+
 )
 
 # Registration and accounts
