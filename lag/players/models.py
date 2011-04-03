@@ -5,9 +5,9 @@ from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.db import models
 
-from registration.backends.default import (DefaultBackend as
+from lag.registration.backends.default import (DefaultBackend as
                                            RegistrationBackend)
-from registration.signals import user_activated
+from lag.registration.signals import user_activated
 
 class Player(models.Model):
     """
