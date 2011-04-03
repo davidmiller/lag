@@ -25,13 +25,21 @@ $('html').ajaxSend(function(event, xhr, settings) {
 function geo_success(position) {
     var lat = position.coords.latitude;
     var lon = position.coords.longitude
-    window.console.log(lat);
-    window.console.log(lon);
     $.post('/locations/a/checkin/',
            {lat: lat, lon:lon},
            function(data){
                window.checkin = $.parseJSON(data);
-               window.console.log(data);
+               var place = window.checkin.place;
+               var creator = window.checkin.creator;
+               var visit_count = window.checkin.visit_count;
+               var last_visited = window.checkin.last_visited;
+               var target = $("#response")
+               $(target).append("<p>You are at lat:"+lat+", lon:"+lon+"</p>");
+               $(target).append("<p>We think this place is called "+place+"</p>");
+               $(target).append("<p>We think that this place was created by "+creator+"</p>");
+               $(target).append("<p>You have visited this place "+visit_count+" times</p>");
+               $(targed).append("<p>You last visited on "+last_visited+"</p>");
+               $
            }
           );
 }
