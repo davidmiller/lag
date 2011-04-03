@@ -46,7 +46,8 @@ function geo_success(position) {
 
 /** oops */
 function geo_error(  ){
-    window.console.log("Fail")
+
+    $("#response").append('<p> Sorry, no geo</p>');
 }
 
 if (geo_position_js.init()) {
