@@ -1,6 +1,8 @@
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns(
-    '',
-    (r'^a/checkin/$', 'locations.views.checkin'),
+    'locations.views',
+    (r'checkin/$', 'checkin'),
+    (r'register-place/$', 'register_place'),
+    (r'confirm-visit/$', 'confirm_visit'),
 )

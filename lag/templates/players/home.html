@@ -1,10 +1,46 @@
 {% extends 'base.html' %}
 {% block main %}
 {{ player }}
+<a href="#" id="checkin">Checkin</a>
 <div id="response">
 
 </div><!--response-->
+<p>
+  You are at Lat: <span id="lat"></span> Lon: <span id="lon"></span>
+</p>
+<div>
+  <p>We think that you are at <span id="guess"></span></p>
+  <p><a href="#" id="confirm_guess">Confirm</a></p>
+  <p>Alternatively this could be:</p>
+  <div id="alternatives">
+
+  </div><!--alternatives-->
+  <p>
+    Or we could have no idea - register a new place
+  </p>
+  <p>
+    Name: <input type="text" name="new_place" value="" />
+  </p>
+  <p>
+    <a href="#" id="new">Register</a>
+  </p>
+</div>
+<div id="visit_details">
+  <p>You are currently visiting <span class="place"></span></p>
+  <div id="visit_stats">
+
+  </div><!--visit_stats-->
+</div><!--visit_details-->
 {% endblock %}
 {% block resources %}
-<a href="/edit-profile/">Edit your profile</a>
+<ul>
+  <li>
+    <a href="/edit-profile/">Edit your profile</a>
+  </li>
+  <li>
+    <a href="/lair/">
+      {% if not player.lair %}Set y{% else %}Y{% endif %}our lair
+    </a>
+  </li>
+</ul>
 {% endblock %}

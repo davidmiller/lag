@@ -1,6 +1,6 @@
 from socket import gethostname
-from unipath import FSPath as Path
-
+#from unipath import FSPath as Path
+import os
 ADMINS = (
      ('David Miller', 'david@larapel.com'),
 )
@@ -8,16 +8,16 @@ ADMINS = (
 MANAGERS = ADMINS
 
 HOSTNAME = gethostname()
-PSQL_HOSTS = ['bosch', 'parmenides']
+PSQL_HOSTS = ['bosch', 'parmenides', 'rasputin']
 DEBUG_HOSTS = ['parmenides', 'jung', 'rasputin', 'bosch']
 
 # Paths
-ROOT = Path(__file__).parent
+ROOT = os.path.dirname(__file__)
 import sys
 sys.path.append(ROOT)
 
-BUILDOUT_ROOT = ROOT.parent
-MEDIA_ROOT = ROOT.child('static')
+BUILDOUT_ROOT = os.path.dirname(ROOT)
+MEDIA_ROOT = os.path.join(ROOT, 'static')
 STATICFILES_DIRS = (
     MEDIA_ROOT,
     )
@@ -35,7 +35,7 @@ TEMPLATE_DEBUG = DEBUG
 # DB
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'lag',
         'USER': 'django',
         'PASSWORD': 'postgres',
@@ -73,7 +73,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'lag.urls'
 
 TEMPLATE_DIRS = (
-    ROOT.child('templates'),
+    os.path.join(ROOT, 'templates'),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -94,7 +94,9 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.staticfiles',
     'debug_toolbar',
-    'south',
+    'django.contrib.gis',
+#    'south',
+    'django_extensions',
     'django_mobile',
     'lag.registration',
     'lag.players',

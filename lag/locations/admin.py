@@ -1,7 +1,7 @@
-from django.contrib import admin
+from django.contrib.gis import admin
 
-from lag.locations.models import Region, Place, Checkin
+from lag.locations.models import Region, Place, Visit
 
 admin.site.register(Region)
-admin.site.register(Place)
-admin.site.register(Checkin)
+admin.site.register(Place, admin.GeoModelAdmin)
+admin.site.register(Visit)

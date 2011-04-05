@@ -1,6 +1,6 @@
 from datetime import date
 
-from django.db import models
+from django.contrib.gis.db import models
 
 
 class Region(models.Model):
@@ -23,13 +23,16 @@ class Place(models.Model):
     lon = models.FloatField()
     region = models.ForeignKey(Region, null=True, blank=True)
     created_by = models.ForeignKey('players.Player', null=True, blank=True)
+    point = models.PointField(srid=4326)
+    objects = models.GeoManager()
 
     def __unicode__(self):
         if self.name:
             return self.name
         return "Place: %s %s" % (self.lat, self.lon)
 
-class Checkin(models.Model):
+
+class Visit(models.Model):
     """
     Record how many times Player has visited Place
     """
@@ -39,4 +42,4 @@ class Checkin(models.Model):
     last_visited = models.DateField(null=True, default=date.today)
 
     def __unicode__( self ):
-        return "Checkin: %s at %s" % (self.player, self.place)
+        return "Visit: %s at %s" % (self.player, self.place)
