@@ -99,7 +99,7 @@ function confirmed_visit_response( data ){
 
 $(document).ready( function(){
     // Manual Checkin init
-    $("#checkin#").click( function(){
+    $("#checkin").click( function(){
         if (geo_position_js.init()) {
             geo_position_js.getCurrentPosition(geo_success, geo_error);
         }else{
