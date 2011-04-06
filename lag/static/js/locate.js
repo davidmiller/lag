@@ -35,23 +35,27 @@ $('html').ajaxSend(function(event, xhr, settings) {
     }
 });
 
+// Shall we have one global variable bucket to not pollute the namespace?
+var $lag = {}
+
 // On successful geolocation, let's talk to the server and get some
 // local game places.
 function geo_success(position) {
     // Register these as globals so that we can refer to them
     // later without having to make another geolocation call.
-    window.lat = position.coords.latitude;
-    window.lon = position.coords.longitude;
-
+    $lag.lat = position.coords.latitude;
+    $lag.lon = position.coords.longitude;
+    $lag.acc = position.coords.accuracy;
     $.post('/locations/checkin/',
-           {lat: window.lat, lon: window.lon},
+           {lat: $lag.lat, lon: $lag.lon},
            function(data){
                var checkin = $.parseJSON(data);
                // Register the server response as a global.
-               window.checkin = checkin
+               $lag.checkin = checkin
                var alternat_holder = $("#alternatives");
-               $("#lat").text(window.lat);
-               $("#lon").text(window.lon);
+               $("#lat").text($lag.lat);
+               $("#lon").text($lag.lon);
+               $("#acc").text($lag.acc);
                $("#guess").text(checkin.guess[1]);
 
                for( var i=0; i < checkin.alternatives.length; i++){
@@ -73,7 +77,7 @@ function geo_error(){
 /** Register a new Place */
 function register_new( name ){
     $.post("/locations/register-place/",
-           {name: name, lat: window.lat, lon: window.lon},
+           {name: name, lat: $lag.lat, lon: $lag.lon},
            function(data){
                confirmed_visit_response(data);
            });
@@ -90,11 +94,11 @@ function confirm_visit( place_id ){
 
 /** Deal with the json from a confirmed visit */
 function confirmed_visit_response( data ){
-    window.visit_details = $.parseJSON(data);
-    $(".place").text(window.visit_details.name);
+    $lag.visit_details = $.parseJSON(data);
+    $(".place").text($lag.visit_details.name);
     var stats_div = $("#visit_stats");
-    $(stats_div).append("<p>Created by: "+window.visit_details.created_by+"</p>");
-    $(stats_div).append("<p>This is your: "+window.visit_details.player_visit_count+"th visit</p>");
+    $(stats_div).append("<p>Created by: "+$lag.visit_details.created_by+"</p>");
+    $(stats_div).append("<p>This is your: "+$lag.visit_details.player_visit_count+"th visit</p>");
 }
 
 $(document).ready( function(){
@@ -115,7 +119,7 @@ $(document).ready( function(){
 
     // Confirm our suggestion
     $("#confirm_guess").click( function(){
-        confirm_visit(window.checkin.guess[0]);
+        confirm_visit($lag.checkin.guess[0]);
     });
 
     // Confirm one of the alternatives
