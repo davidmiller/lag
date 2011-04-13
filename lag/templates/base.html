@@ -7,7 +7,11 @@
     <title>Lag</title>
     <meta name="author" content="David Miller">
     {% block styles %}
+    {% if flavour == "mobile" %}
+    <link rel="stylesheet" href="{{MEDIA_URL}}css/mobile.css" type="text/css" media="screen" />
+    {% else %}
     <link rel="stylesheet" href="{{STATIC_PREFIX}}css/screen.css" type="text/css" media="screen" />
+    {% endif %}
     {% endblock %}
     {% block scripts %}
     <script type="text/javascript" src="{{STATIC_PREFIX}}js/lib/jquery.js"></script>
@@ -17,9 +21,17 @@
     {% endblock %}
     {% block rss %}{% endblock %}
     {% block extrahead %}{% endblock %}
+
+    {% if flavour == "mobile" %}
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+    {% endif %}
   </head>
   <body>
+    <h2>
+   Flavour: {{ flavour }} || {% block extracont %}
 
+   {% endblock %}
+   </h2>
     <div id="page">
       <div id="header">
         <a href="/">
