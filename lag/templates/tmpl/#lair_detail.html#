@@ -1,4 +1,0 @@
-<h1>Your Lair!</h1>
-<p>{{ name }}</p>
-<p>{{ lat }}</p>
-<p>{{ lon }}</p>
