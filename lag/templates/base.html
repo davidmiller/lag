@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Lag</title>
+    <title>{% block title %}Lag{% endblock %}</title>
     <meta name="author" content="David Miller">
     {% block styles %}
     {% if flavour == "mobile" %}
@@ -15,23 +15,24 @@
     {% endblock %}
     {% block scripts %}
     <script type="text/javascript" src="{{STATIC_PREFIX}}js/lib/jquery.js"></script>
+    <script type="text/javascript" src="{{STATIC_PREFIX}}js/lib/jquery.tmpl.js"></script>
     <script type="text/javascript" src="{{STATIC_PREFIX}}js/lib/gears_init.js"></script>
     <script type="text/javascript" src="{{STATIC_PREFIX}}js/lib/geo.js"></script>
-    <script type="text/javascript" src="{{STATIC_PREFIX}}js/locate.js"></script>
+    <script type="text/javascript" src="{{STATIC_PREFIX}}js/lag.js"></script>
     {% endblock %}
+    {% block extrascripts %}{% endblock %}
     {% block rss %}{% endblock %}
     {% block extrahead %}{% endblock %}
 
     {% if flavour == "mobile" %}
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
     {% endif %}
+    {% load tmpl %}
+    {% block tmpl %}
+    {% tmpl 'tmpl/message.html' 'message_tmpl' %}
+    {% endblock %}
   </head>
   <body>
-    <h2>
-   Flavour: {{ flavour }} || {% block extracont %}
-
-   {% endblock %}
-   </h2>
     <div id="page">
       <div id="header">
         <a href="/">
@@ -48,6 +49,10 @@
         {% block login %}
         {% if user.is_authenticated %}
         Hi <a href="/home/">{{ user }}</a> |
+        <a href="/accounts/logout/">Logout</a> |
+        {% if request.user.is_superuser %}
+        <a href="/admin/">Admin</a> |
+        {% endif %}
         {% else %}
         <a href="/accounts/login/">Login</a> |
         <a href="/accounts/register/">Register</a>
@@ -57,6 +62,11 @@
       </div>
 
       <div id="body" class="wrapper">
+        {% block messages %}
+        <div id="messages">
+
+        </div><!--messages-->
+        {% endblock %}
         <div id="main">
         {% block main %}{% endblock main %}
         </div>

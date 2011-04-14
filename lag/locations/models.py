@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from django.contrib.gis.db import models
 
@@ -14,22 +14,43 @@ class Region(models.Model):
     def __unicode__( self ):
         return self.name
 
-class Place(models.Model):
+class Location(models.Model):
     """
-    Ooh - look where we are now
+    Abstract class for Locations
     """
     name = models.CharField(max_length=200, null=True)
     lat = models.FloatField()
     lon = models.FloatField()
     region = models.ForeignKey(Region, null=True, blank=True)
-    created_by = models.ForeignKey('players.Player', null=True, blank=True)
     point = models.PointField(srid=4326)
+    created = models.DateField(default=datetime.now)
+
     objects = models.GeoManager()
+
+    class Meta:
+        abstract = True
+
+class Place(Location):
+    """
+    A public place - Cafe Etc
+    """
+    created_by = models.ForeignKey('players.Player', null=True, blank=True)
 
     def __unicode__(self):
         if self.name:
             return self.name
         return "Place: %s %s" % (self.lat, self.lon)
+
+class Lair(Location):
+    """
+    A player has a lair.
+    """
+    created_by = models.ForeignKey('players.Player', null=True, blank=True,
+                                   related_name="lair_createdby")
+    active = models.BooleanField(default=True)
+
+    def __unicode__( self ):
+        return self.name
 
 
 class Visit(models.Model):

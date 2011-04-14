@@ -59,8 +59,8 @@ SECRET_KEY = 'q5r$$z4t(xy27q28^vtng)12ml)h!16v1^z%xr+2@yys67e)#p'
 
 TEMPLATE_LOADERS = (
     'django_mobile.loader.Loader',
-    'django.template.loaders.filesystem.load_template_source',
-    'django.template.loaders.app_directories.load_template_source',
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -99,9 +99,10 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'debug_toolbar',
     'django.contrib.gis',
-#    'south',
+    'south',
     'django_extensions',
     'django_mobile',
+    'lag.templatetags',
     'lag.registration',
     'lag.players',
     'lag.locations',

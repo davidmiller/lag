@@ -9,6 +9,7 @@ from registration.backends.default import (DefaultBackend as
                                            RegistrationBackend)
 from registration.signals import user_activated
 
+
 class Player(models.Model):
     """
     Someone playing our game!
@@ -32,8 +33,9 @@ class Player(models.Model):
     short_bio = models.CharField(max_length=400, blank=True, null=True)
     profile_pic = models.ImageField(upload_to=upload_profile_pic,
                                     blank=True, null=True)
-    lair = models.ForeignKey('locations.Place', null=True, blank=True,
+    lairs = models.ManyToManyField('locations.Lair', null=True, blank=True,
                              default=None)
+    has_lair = models.BooleanField(default=False)
 
     def __unicode__( self ):
         if self.surname and self.firstname:

@@ -1,6 +1,10 @@
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+import json
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.gis.geos import Point
+from django.http import HttpResponseRedirect, HttpResponse
+
+from lag.locations.models import Lair
 from lag.players.forms import PlayerForm
 from lag.utils.shortcuts import render_to
 
@@ -35,3 +39,46 @@ def edit_profile(request):
     else:
         form = PlayerForm(instance=player)
     return dict(form=form, player=player)
+
+@login_required
+@render_to('players/lair_detail.html')
+def lair_detail(request):
+    """
+    If the player has a lair set, then they have the opportunity to
+    perform various Lair-specific interactions.
+
+    Otherwise, they can set their lair.
+    """
+    player = request.user.get_profile()
+    if request.method == "POST":
+        lat = request.POST['lat']
+        lon = request.POST['lon']
+        name = request.POST['name']
+        point = Point(x=float(lon), y=float(lat))
+
+        lair = Lair(lat=lat, lon=lon, created_by=player,
+                    point=point,
+                    name=name)
+        lair.save()
+
+        player.lairs.add(lair)
+        player.has_lair = True
+        player.save()
+        created = lair.created.strftime("%Y-%m-%d")
+        msg = "You've just created your lair - have some objectz"
+
+
+    else:
+        lairqs = player.lairs.filter(active=True)
+
+        if lairqs.count() == 0:
+            return dict(player=player)
+        lair = lairqs[0]
+        name = lair.name
+        created = lair.created.strftime("%Y-%m-%d")
+
+    if request.is_ajax():
+        return HttpResponse(json.dumps(dict(name=name, created=created,
+                                            message=msg)))
+    return dict(player=player, name=name,
+                created=created, lair=lair)

@@ -1,0 +1,358 @@
+
+.ropeproject/config.py,48
+def set_prefs(4,30
+def project_opened(83,3339
+
+artifacts/tests.py,61
+class SimpleTest(11,219
+    def test_basic_addition(12,247
+
+artifacts/models.py,48
+class Artifact(3,30
+    def __unicode__(9,145
+
+views.py,19
+def homepage(4,71
+
+locations/.ropeproject/config.py,48
+def set_prefs(4,30
+def project_opened(83,3339
+
+locations/views.py,121
+def place_detail(15,398
+def checkin(29,753
+def register_place(54,1492
+def confirm_visit(81,2297
+def logger(104,3033
+
+locations/tests.py,61
+class SimpleTest(11,219
+    def test_basic_addition(12,247
+
+locations/models.py,144
+class Region(6,70
+    def __unicode__(14,263
+class Place(17,318
+    def __unicode__(29,722
+class Visit(35,855
+    def __unicode__(44,1147
+
+templatetags/templatetags/tmpl.py,89
+class TmplNode(11,141
+    def __init__(16,233
+    def render(27,479
+def tmpl(42,1001
+
+templatetags/templatetags/tmpl.pyc,18
+<script id=3,154
+
+templatetags/tests.py,61
+class SimpleTest(11,219
+    def test_basic_addition(12,247
+
+utils/shortcuts.py,80
+def render_to(4,92
+    def renderer(14,488
+        def _apply_context(16,537
+
+registration/urls.pyc,24
+continue working,5,222
+
+registration/backends/__init__.pyc,86
+    Return an instance of a registration backend,6,385
+    Python import path 7,452
+
+registration/backends/__init__.py,24
+def get_backend(11,283
+
+registration/backends/default/__init__.pyc,214
+    1. User signs up,8,468
+    3. User clicks activation link,12,572
+    * The setting ``ACCOUNT_ACTIVATION_DAYS`` be supplied,20,820
+    * The setting ``ACCOUNT_ACTIVATION_DAYS`` be supplied, specifying20,820
+
+registration/backends/default/__init__.py,267
+class DefaultBackend(10,266
+    def register(49,1783
+        class of 70,2787
+    def activate(85,3431
+    def registration_allowed(103,4169
+    def get_form_class(118,4717
+    def post_registration_redirect(125,4880
+    def post_activation_redirect(133,5106
+
+registration/backends/simple/__init__.py,235
+class SimpleBackend(10,244
+    def register(18,522
+    def activate(35,1221
+    def registration_allowed(38,1290
+    def get_form_class(53,1846
+    def post_registration_redirect(56,1918
+    def post_activation_redirect(63,2123
+
+registration/views.py,43
+def activate(14,250
+def register(95,3206
+
+registration/forms.py,277
+class RegistrationForm(19,478
+    def clean_username(45,1823
+    def clean(57,2237
+class RegistrationFormTermsOfService(71,2783
+class RegistrationFormUniqueEmail(82,3244
+    def clean_email(88,3405
+class RegistrationFormNoFreeEmail(99,3789
+    def clean_email(114,4414
+
+registration/tests/backends.py,1298
+class _MockRequestClient(23,762
+    def request(29,906
+def _mock_request(63,2104
+class BackendRetrievalTests(73,2369
+    def test_get_backend(79,2502
+    def test_backend_error_invalid(88,2809
+    def test_backend_attribute_error(97,3112
+        class of 100,3236
+class DefaultRegistrationBackendTests(107,3464
+    def setUp(119,3842
+    def tearDown(129,4198
+    def test_registration(138,4446
+    def test_registration_no_sites(164,5476
+    def test_valid_activation(189,6370
+    def test_invalid_activation(213,7454
+    def test_allow(231,8336
+    def test_form_class(245,8856
+    def test_post_registration_redirect(253,9111
+    def test_registration_signal(262,9448
+        def receiver(268,9604
+    def test_activation_signal_success(286,10364
+        def receiver(292,10537
+    def test_activation_signal_failure(312,11475
+    def test_email_send_action(334,12411
+    def test_activation_action(355,13466
+class SimpleRegistrationBackendTests(372,14102
+    def test_registration(380,14296
+    def test_allow(401,15128
+    def test_form_class(415,15648
+    def test_post_registration_redirect(423,15903
+    def test_registration_signal(437,16492
+        def receiver(443,16648
+    def test_activation(461,17408
+    def test_post_activation_redirect(469,17657
+
+registration/tests/views.py,698
+class RegistrationViewTests(13,287
+    def setUp(20,414
+    def tearDown(30,766
+    def test_registration_view_initial(39,1010
+    def test_registration_view_success(52,1572
+    def test_registration_view_failure(68,2342
+    def test_registration_view_closed(85,3168
+    def test_registration_template_name(110,4249
+    def test_registration_extra_context(120,4632
+    def test_registration_disallowed_url(131,5088
+    def test_registration_success_url(147,5701
+    def test_valid_activation(161,6431
+    def test_invalid_activation(182,7445
+    def test_activation_success_url(208,8738
+    def test_activation_template_name(226,9674
+    def test_activation_extra_context(236,10092
+
+registration/tests/forms.py,226
+class RegistrationFormTests(7,111
+    def test_registration_form(12,208
+    def test_registration_form_tos(55,2102
+    def test_registration_form_unique_email(76,3181
+    def test_registration_form_no_free_email(100,4379
+
+registration/tests/__init__.py,123
+class RegistrationVersionInfoTests(11,217
+    def setUp(17,362
+    def tearDown(20,428
+    def test_get_version(23,501
+
+registration/tests/models.py,680
+class RegistrationModelTests(15,353
+    def setUp(24,606
+    def tearDown(28,754
+    def test_profile_creation(31,842
+    def test_activation_email(47,1502
+    def test_user_creation(59,1967
+    def test_user_creation_email(72,2541
+    def test_user_creation_no_email(81,2915
+    def test_unexpired_account(92,3416
+    def test_expired_account(103,3902
+    def test_valid_activation(116,4508
+    def test_expired_activation(134,5333
+    def test_activation_invalid_key(157,6287
+    def test_activation_already_activated(165,6516
+    def test_activation_nonexistent_key(178,7148
+    def test_expired_user_deletion(189,7596
+    def test_management_command(208,8706
+
+registration/management/commands/cleanupregistration.py,52
+class Command(15,382
+    def handle_noargs(18,478
+
+registration/admin.pyc,44
+        Activates the selected users,5,604
+
+registration/admin.py,102
+class RegistrationAdmin(9,241
+    def activate_users(15,487
+    def resend_activation_email(25,820
+
+registration/views.pyc,47
+       of an account is to be allowed;84,3943
+
+registration/__init__.py,22
+def get_version(3,33
+
+registration/models.py,350
+class RegistrationManager(17,384
+    def activate_user(26,706
+    def create_inactive_user(62,2055
+    def create_profile(85,2874
+    def delete_expired_users(103,3599
+class RegistrationProfile(150,5722
+    class Meta:Meta173,6616
+    def __unicode__(177,6743
+    def activation_key_expired(180,6837
+    def send_activation_email(207,8066
+
+players/.ropeproject/config.py,48
+def set_prefs(4,30
+def project_opened(83,3339
+
+players/views.py,66
+def home(8,220
+def edit_profile(22,538
+def lair_detail(41,1047
+
+players/forms.py,51
+class PlayerForm(5,75
+    class Meta:Meta10,140
+
+players/tests.py,61
+class SimpleTest(11,219
+    def test_basic_addition(12,247
+
+players/models.py,112
+class Player(12,313
+    def upload_profile_pic(16,387
+    def __unicode__(38,1267
+def create_player(43,1435
+
+settings.pyc,0
+
+players/forms.pyc,0
+
+players/__init__.py,0
+
+players/views.pyc,0
+
+players/models.pyc,0
+
+players/admin.py,0
+
+players/__init__.pyc,0
+
+players/admin.pyc,0
+
+players/#views.py#,0
+
+players/migrations/0001_initial.pyc,0
+
+players/migrations/__init__.pyc,0
+
+urls.py,0
+
+registration/forms.pyc,0
+
+registration/auth_urls.pyc,0
+
+registration/urls.py,0
+
+registration/signals.pyc,0
+
+registration/signals.py,0
+
+registration/models.pyc,0
+
+registration/__init__.pyc,0
+
+registration/auth_urls.py,0
+
+registration/management/__init__.py,0
+
+registration/management/__init__.pyc,0
+
+registration/management/commands/__init__.py,0
+
+registration/tests/urls.py,0
+
+registration/backends/simple/urls.py,0
+
+registration/backends/default/urls.py,0
+
+registration/backends/default/urls.pyc,0
+
+__init__.py,0
+
+views.pyc,0
+
+utils/__init__.py,0
+
+utils/__init__.pyc,0
+
+utils/shortcuts.pyc,0
+
+__init__.pyc,0
+
+templatetags/models.py,0
+
+templatetags/__init__.py,0
+
+templatetags/models.pyc,0
+
+templatetags/__init__.pyc,0
+
+templatetags/templatetags/__init__.py,0
+
+templatetags/templatetags/__init__.pyc,0
+
+templatetags/views.py,0
+
+locations/urls.py,0
+
+locations/__init__.py,0
+
+locations/views.pyc,0
+
+locations/models.pyc,0
+
+locations/admin.py,0
+
+locations/__init__.pyc,0
+
+locations/admin.pyc,0
+
+locations/migrations/0001_initial.pyc,0
+
+locations/migrations/0002_auto__add_field_checkin_visits.pyc,0
+
+locations/migrations/__init__.pyc,0
+
+locations/migrations/0003_auto__add_field_checkin_last_visited__add_field_place_created_by.pyc,0
+
+locations/urls.pyc,0
+
+manage.py,0
+
+artifacts/__init__.py,0
+
+artifacts/views.py,0
+
+urls.pyc,0
+
+settings.py,0

@@ -9,6 +9,21 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
 from lag.locations.models import Place, Visit
+from lag.utils.shortcuts import render_to
+
+@render_to('locations/place_detail.html')
+def place_detail(request, id):
+    """
+    Show the detail for a particular place
+
+    Arguments:
+    - `id`:
+    """
+    place = get_object_or_404(Place, id=id)
+    nearby = Place.objects.distance(place.point,
+                                    field_name='point').order_by('distance')
+    return dict(place=place, nearby=nearby[1:3])
+
 
 @login_required
 def checkin(request):
@@ -17,7 +32,7 @@ def checkin(request):
 
     Then make checkin
     """
-    if not request.is_ajax:
+    if not request.is_ajax():
         return HttpResponse('No')
     player = request.user.get_profile()
     lat = request.POST['lat']
@@ -27,7 +42,7 @@ def checkin(request):
     places = Place.objects.distance(point).order_by('distance')[:5]
     try:
         guess = [places[0].pk, places[0].name]
-    except KeyError:
+    except IndexError:
         guess = False
     alternatives = []
     for place in places[1:]:
@@ -40,7 +55,7 @@ def register_place(request):
     """
     We're going to be registering a new place from user energy
     """
-    if not request.is_ajax:
+    if not request.is_ajax():
         return HttpResponse('No')
     player = request.user.get_profile()
     name = request.POST['name']
@@ -69,7 +84,7 @@ def confirm_visit(request):
 
     Let's give them the relevant stats about it.
     """
-    if not request.is_ajax:
+    if not request.is_ajax():
         return HttpResponse('No')
     player = request.user.get_profile()
     place_id = request.POST['place_id']

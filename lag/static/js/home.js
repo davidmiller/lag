@@ -1,5 +1,5 @@
 //
-// locate.js
+// home.js
 //
 // Author David Miller <david at deadpansincerity.com>
 //
@@ -8,44 +8,13 @@
 // By nature this file is mostly DOM munging and
 // registering handlers for various events.
 //
-// We will also modify jQuery's AJAX
-// methods to allow us to pass the CSRF hash as a
-// request header.
-//
 
-$('html').ajaxSend(function(event, xhr, settings) {
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie != '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-        // Only send the token to relative URLs i.e. locally.
-        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-    }
-});
-
-// Shall we have one global variable bucket to not pollute the namespace?
-var $lag = {}
 
 // On successful geolocation, let's talk to the server and get some
 // local game places.
-function geo_success(position) {
+function homepage_checkin(position) {
     // Register these as globals so that we can refer to them
     // later without having to make another geolocation call.
-    $lag.lat = position.coords.latitude;
-    $lag.lon = position.coords.longitude;
-    $lag.acc = position.coords.accuracy;
     $.post('/locations/checkin/',
            {lat: $lag.lat, lon: $lag.lon},
            function(data){
@@ -69,10 +38,6 @@ function geo_success(position) {
           );
 }
 
-/** oops */
-function geo_error(){
-    $("#response").append("<p>Geolocation not enabled - check your settings</p>");
-}
 
 /** Register a new Place */
 function register_new( name ){
@@ -104,11 +69,7 @@ function confirmed_visit_response( data ){
 $(document).ready( function(){
     // Manual Checkin init
     $("#checkin").click( function(){
-        if (geo_position_js.init()) {
-            geo_position_js.getCurrentPosition(geo_success, geo_error);
-        }else{
-            no_geo()
-        }
+        checkin(homepage_checkin);
     });
 
     // Register a new place

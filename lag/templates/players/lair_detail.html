@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Lag - {{ request.user }}'s Lair{% endblock %}
+{% block extrascripts %}
+    <script type="text/javascript" src="{{STATIC_PREFIX}}js/lair.js"></script>
+{% endblock %}
+{% block tmpl %}{{ block.super }}
+{% load tmpl %}{% tmpl "tmpl/lair_detail.html" "lair_tmpl" %}
+{% endblock %}
+{% block main %}
+<div id="lair_detail">
+{% if lair %}
+      {% include 'tmpl/lair_detail.html' %}
+{% else %}
+<div id="lair_create">
+  <h2>Get Yerself a Lair </h2>
+  <p>
+    Name:
+    <input type="text" name="name" value="" id="new_name"/>
+  </p>
+  <a href="#" id="create_lair">Create Lair</a>
+</div><!--lair_create-->
+{% endif %}
+</div><!--lair_detail-->
+{% endblock %}

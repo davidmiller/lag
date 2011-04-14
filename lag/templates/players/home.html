@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% block extrascripts %}
+    <script type="text/javascript" src="{{STATIC_PREFIX}}js/home.js"></script>
+{% endblock %}
 {% block main %}
 {{ player }}
 <a href="#" id="checkin">Checkin</a>
@@ -42,7 +45,7 @@
   </li>
   <li>
     <a href="/lair/">
-      {% if not player.lair %}Set y{% else %}Y{% endif %}our lair
+      {% if not player.has_lair %}Set y{% else %}Y{% endif %}our lair
     </a>
   </li>
 </ul>

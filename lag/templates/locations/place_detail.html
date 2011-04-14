@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block tmpl %}{{ block.super }}
+{% load tmpl %}{% tmpl "tmpl/place_detail.html" "place_detail" %}
+{% endblock %}
+{% block main %}
+{{ place }}
+{% endblock %}
+{% block resources %}
+<h3>Nearby places</h3>
+{% for place in nearby %}
+{% include 'tmpl/place_detail.html' %}
+{% endfor %}
+{% endblock %}
