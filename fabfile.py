@@ -39,17 +39,19 @@ def pull_new_changes():
     with cd("/home/web/lag"):
         run("git pull origin master")
 
-def syncdb():
-    "run syncdb"
-    with cd("/home/web/lag"):
-        run("./bin/django syncdb")
+def migrate():
+    "Get the db in the correct state"
+    with cd("/home/web/lag/lag"):
+        run("../bin/django syncdb")
+        run("../bin/django migrate")
 
 def deploy():
     """
     Deploy most recent changes to application
     """
     pull_new_changes()
-    buildout()
+    migrate()
+#    buildout()
     restart_app()
 
 

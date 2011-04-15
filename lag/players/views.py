@@ -1,3 +1,7 @@
+"""
+Let's get viewtastic with our players
+"""
+
 import json
 
 from django.contrib.auth.decorators import login_required
@@ -82,3 +86,16 @@ def lair_detail(request):
                                             message=msg)))
     return dict(player=player, name=name,
                 created=created, lair=lair)
+@login_required
+@render_to('players/pocket_detail.html')
+def pocket_detail(request):
+    """
+    Show me what's in your pocketsses
+    """
+    player = request.user.get_profile()
+    pocket = player.pocket_set.get()
+    artifacts = player.pocketartifact_set.all()
+    treasures = player.pockettreasure_set.all()
+
+    return dict(player=player, pocket=pocket,
+                artifacts=artifacts, treasures=treasures)
