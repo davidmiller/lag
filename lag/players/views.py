@@ -20,9 +20,10 @@ def home(request):
     Arguments:
     - `req`:
     """
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect('/')
-    player = request.user.get_profile()
+    try:
+        player = request.user.get_profile()
+    except AttributeError:
+        HttpResponseRedirect("/")
     return dict(player=player)
 
 @login_required
