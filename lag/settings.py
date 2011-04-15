@@ -25,7 +25,7 @@ STATIC_URL = '/m/'
 ADMIN_MEDIA_PREFIX = '/m/admin/'
 if HOSTNAME == 'bosch':
     ADMIN_MEDIA_PREFIX = '/media/'
-# Debug
+# Debug (pony-get-settings-file)
 DEBUG = False
 if HOSTNAME in DEBUG_HOSTS:
     DEBUG = True
@@ -106,6 +106,7 @@ INSTALLED_APPS = (
     'lag.registration',
     'lag.players',
     'lag.locations',
+    'lag.items',
 
 )
 

@@ -54,8 +54,53 @@ def create_player(sender, user, request, **kwargs):
     """
     player = Player(user=user)
     player.save()
+    pocket = Pocket(player=player)
+    pocket.save()
     user.backend = 'django.contrib.auth.backends.ModelBackend'
     login(request, user)
     return player
 
 user_activated.connect(create_player, sender=RegistrationBackend)
+
+
+class Pocket(models.Model):
+    """
+    A player has a pocket, in which they keep any number of increasingly
+    unlikely Artifacts.
+    """
+    player = models.ForeignKey(Player, unique=True)
+    has_phone = models.BooleanField(default=False)
+    has_camera = models.BooleanField(default=False)
+    has_compass = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return "%s's Pocket" % self.player.__unicode__()
+
+class PocketItem(models.Model):
+    """
+    A player stores various Items in various quantities in their Pocket.
+    """
+    player = models.ForeignKey(Player, blank=True, null=True)
+    qty = models.IntegerField(default=0)
+
+    class Meta:
+        abstract = True
+
+class PocketArtifact(PocketItem):
+    """
+    Artifacts in the pocket
+    """
+    artifact = models.ForeignKey('items.Artifact')
+
+    def __unicode__( self ):
+        return "PocketArtifact: %s x %s" % (self.artifact, self.qty)
+
+class PocketTreasure(PocketItem):
+    """
+    Treasures in the pocket
+    """
+    treasure = models.ForeignKey('items.Treasure')
+
+    def __unicode__( self ):
+        return "PocketTreasure: %s x %s" % (self.treasure, self.qty)
+
