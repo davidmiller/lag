@@ -23,7 +23,7 @@ def home(request):
     try:
         player = request.user.get_profile()
     except AttributeError:
-        HttpResponseRedirect("/")
+        return HttpResponseRedirect("/")
     return dict(player=player)
 
 @login_required
