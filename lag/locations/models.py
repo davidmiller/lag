@@ -63,4 +63,6 @@ class Visit(models.Model):
     last_visited = models.DateField(null=True, default=date.today)
 
     def __unicode__( self ):
-        return "Visit: %s at %s" % (self.player, self.place)
+        msg_tpl = "%s visited %s at %s for the %sth time"
+        return msg_tpl % (self.player.__unicode__(), self.place.__unicode__(),
+                          self.last_visited, self.visits)
