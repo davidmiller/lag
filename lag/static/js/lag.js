@@ -9,6 +9,7 @@
 // request header.
 //
 // Provide site-wide checkin function and client side messages
+//
 
 // Shall we have one global variable bucket to not pollute the namespace?
 var $lag = {}
@@ -58,7 +59,7 @@ function json_loads(data){
 
 /** oops */
 function geo_error(){
-    $("#mesages").append("<p>Geolocation not enabled - check your settings</p>");
+    notify("Geolocation not enabled - check your settings");
 }
 
 
