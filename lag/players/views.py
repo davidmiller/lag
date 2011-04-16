@@ -24,7 +24,7 @@ def home(request):
         player = request.user.get_profile()
     except AttributeError:
         return HttpResponseRedirect("/")
-    visits = Visit.objects.all().order_by('last_visited')[:5]
+    visits = Visit.objects.all().order_by('-last_visited')[:5]
     return dict(player=player, visits=visits)
 
 @login_required
