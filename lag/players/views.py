@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.gis.geos import Point
 from django.http import HttpResponseRedirect, HttpResponse
 
-from lag.locations.models import Lair
+from lag.locations.models import Lair, Visit
 from lag.players.forms import PlayerForm
 from lag.utils.shortcuts import render_to
 
@@ -24,7 +24,8 @@ def home(request):
         player = request.user.get_profile()
     except AttributeError:
         return HttpResponseRedirect("/")
-    return dict(player=player)
+    visits = Visit.objects.all().order_by('last_visited')[:5]
+    return dict(player=player, visits=visits)
 
 @login_required
 @render_to('players/edit_profile.html')
