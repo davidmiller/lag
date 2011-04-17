@@ -23,17 +23,35 @@ class Location(models.Model):
     lon = models.FloatField()
     region = models.ForeignKey(Region, null=True, blank=True)
     point = models.PointField(srid=4326)
-    created = models.DateField(default=datetime.now)
+    created = models.DateTimeField(default=datetime.now)
 
     objects = models.GeoManager()
 
     class Meta:
         abstract = True
 
+class PlaceType(models.Model):
+    """
+    A category for places - whether it is a pub station etc
+    """
+    name = models.CharField(max_length=200)
+    soothsayer_percentage = models.IntegerField(default=10)
+    wizard_percentage = models.IntegerField(default=10)
+    doctor_percentage = models.IntegerField(default=10)
+    philosopher_percentage = models.IntegerField(default=10)
+
+    def __unicode__( self ):
+        return self.name
+
 class Place(Location):
     """
     A public place - Cafe Etc
     """
+    placetype = models.ForeignKey(PlaceType, blank=True, null=True,
+                                  default=None)
+    visits = models.IntegerField(default=0)
+    unique_visitors = models.IntegerField(default=0)
+    items_found = models.IntegerField(default=0)
     created_by = models.ForeignKey('players.Player', null=True, blank=True)
 
     def __unicode__(self):
