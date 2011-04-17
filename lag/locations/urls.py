@@ -5,5 +5,5 @@ urlpatterns = patterns(
     (r'place/(?P<id>\d+)/', 'place_detail'),
     (r'checkin/$', 'checkin'),
     (r'register-place/$', 'register_place'),
-    (r'confirm-visit/$', 'confirm_visit'),
+    (r'visit/$', 'visit'),
 )

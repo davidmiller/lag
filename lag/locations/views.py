@@ -1,6 +1,7 @@
 import os
 from datetime import date
 import json
+import random
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -9,6 +10,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
 from lag.locations.models import Place, Visit
+from lag.npcs.models import SoothSayer, Wizard, Doctor, Philosopher
 from lag.utils.shortcuts import render_to
 
 @render_to('locations/place_detail.html')
@@ -78,7 +80,7 @@ def register_place(request):
     return HttpResponse()
 
 @login_required
-def confirm_visit(request):
+def visit(request):
     """
     The player has confirmed that they're visiting this place.
 
@@ -90,16 +92,48 @@ def confirm_visit(request):
     place_id = request.POST['place_id']
     place = get_object_or_404(Place, pk=place_id)
     visit = Visit.objects.get_or_create(player=player, place=place)[0]
+    if visit.visits == 0:
+        place.unique_visitors += 1
     visit.last_visited = date.today()
     visit.visits += 1
     visit.save()
     place_visits = place.visit_set.all().count()
-    params = dict(
+    place.visits += 1
+    place.save()
+    stats = dict(
         name=place.name,
-        created_by=place.created_by.__unicode__(),
-        player_visit_count=visit.visits
+        place_created=place.created.strftime("%Y-%m-%d"),
+        visits=place.visits,
+        unique_visitors=place.unique_visitors,
+        items_found=place.items_found,
+        player_visits=visit.visits
         )
-    return HttpResponse(json.dumps(params))
+    chanced = []
+    npc_percs = (
+        (SoothSayer, place.placetype.soothsayer_percentage),
+        (Philosopher, place.placetype.philosopher_percentage),
+        (Doctor, place.placetype.doctor_percentage),
+        (Wizard, place.placetype.wizard_percentage),
+        )
+    for npc, percentage in npc_percs:
+        if random.randrange(0, 101) < percentage:
+            chanced.append(npc.objects.get(pk=1))
+
+    npcs = []
+    for npc in chanced:
+        icon = npc.icon.url if npc.icon else False
+        npc_dict = {
+            "name": npc._meta.object_name,
+            "description": npc.description,
+            "icon": icon
+            }
+        interaction_count = npc.interactions.all().count()
+        interaction_index = random.randrange(0, interaction_count)
+        npc_dict['text'] = npc.interactions.all()[interaction_index].text
+        npcs.append(npc_dict)
+
+    print npcs
+    return HttpResponse(json.dumps(dict(stats=stats, npcs=npcs)))
 
 def logger(request):
     """
