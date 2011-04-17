@@ -16,9 +16,11 @@ class Item(models.Model):
     released = models.BooleanField(default=False)
     created_date = models.DateField(default=date.today)
     released_date = models.DateField(blank=True, null=True)
+    flavour_text = models.TextField(null=True)
 
     class Meta:
         abstract = True
+
 
 class Artifact(Item):
     """
@@ -26,9 +28,9 @@ class Artifact(Item):
     """
     quantity = models.IntegerField(default=0)
 
-
     def __unicode__( self ):
         return self.name
+
 
 class Treasure(Item):
     """
@@ -47,3 +49,16 @@ class Treasure(Item):
     def __unicode__( self ):
         return self.name
 
+
+class YNAcquisition(models.Model):
+    """
+    An acquisition for an item based on Text, Yes/No, with responses for both.
+    """
+    artifact = models.ForeignKey(Artifact, blank=True, null=True)
+    treasure = models.ForeignKey(Treasure, blank=True, null=True)
+    dilemma = models.TextField()
+    yes = models.TextField()
+    no = models.TextField()
+
+    def __unicode__( self ):
+        return self.dilemma[:12]
