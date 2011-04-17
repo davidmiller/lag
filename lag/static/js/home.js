@@ -30,7 +30,7 @@ function homepage_checkin(position) {
                for( var i=0; i < checkin.alternatives.length; i++){
                    var alt_p = "<p>"+checkin.alternatives[i][1]+"<p>";
                    alt_p += '<p><a href="#" class="confirm_alt" id="';
-                   alt_p += checkin.alternatives[i][0]+'">Confirm</a></p>';
+                   alt_p += checkin.alternatives[i][0]+'">Confirm</a></p><hr />';
                    $(alternat_holder).append(alt_p);
                }
                $
@@ -49,43 +49,54 @@ function register_new( name ){
 }
 
 /** Confirm a visit to a Place already in or database */
-function confirm_visit( place_id ){
-    $.post('/locations/confirm-visit/',
+function visit( place_id ){
+    $.post('/locations/visit/',
            {place_id: place_id},
            function(data){
-               confirmed_visit_response(data);
+               parse_visit_response(data);
            });
 }
 
 /** Deal with the json from a confirmed visit */
-function confirmed_visit_response( data ){
-    $lag.visit_details = $.parseJSON(data);
+function parse_visit_response( data ){
+    $lag.visit_details = json_loads(data);
     $(".place").text($lag.visit_details.name);
-    var stats_div = $("#visit_stats");
-    $(stats_div).append("<p>Created by: "+$lag.visit_details.created_by+"</p>");
-    $(stats_div).append("<p>This is your: "+$lag.visit_details.player_visit_count+"th visit</p>");
+    $("#visit_stats").html("");
+    $("#visit_npcs").html("");
+    $("#place_tmpl").tmpl($lag.visit_details.stats).appendTo("#visit_stats");
+    for(var i=0; i< $lag.visit_details.npcs.length; i++){
+        $("#npc_int_tmpl").tmpl($lag.visit_details.npcs[i]).appendTo("#visit_npcs");
+    }
 }
 
 $(document).ready( function(){
+
+    // Automatically get location
+    checkin(homepage_checkin)
+
     // Manual Checkin init
     $("#checkin").click( function(){
         checkin(homepage_checkin);
+        return false;
     });
 
     // Register a new place
     $("#new").click( function(){
         var name = $("input[name='new_place']").val();
         register_new(name);
+        return false;
     });
 
     // Confirm our suggestion
     $("#confirm_guess").click( function(){
-        confirm_visit($lag.checkin.guess[0]);
+        visit($lag.checkin.guess[0]);
+        return false;
     });
 
     // Confirm one of the alternatives
     $(".confirm_alt").live("click", function(){
-        confirm_visit($(this).attr('id'));
+        visit($(this).attr('id'));
+        return false;
     });
 });
 

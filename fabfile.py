@@ -71,9 +71,9 @@ def pull_live_data():
     """
     Export apps as fixtures and then insert them into the local db
     """
-    apps = ['npcs,' 'items', 'locations', 'players', 'auth']
-    filename = os.path.join(ROOT, 'utils/fixtures/dump.json')
+    apps = ['npcs', 'items', 'locations', 'players', 'auth']
+    filename = os.path.join(ROOT, 'lag/utils/fixtures/dump.json')
     command = "ssh larapel.com /home/web/lag/bin/django dumpdata %s > %s"
-    local(command % (apps, filename))
+    local(command % (" ".join(apps), filename))
 
 

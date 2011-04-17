@@ -77,6 +77,9 @@ function checkin_success(position){
 // Then perform the `success` fn.
 // If an error occurs, call the optional `fail` fn, or `geo_error`
 function checkin(success, fail){
+    if( $lag.lat && $lag.lon && $lag.acc){
+        $lag.checkins.push({lat:$lag.lat, lon:$lag.lon, acc:$lag.acc})
+    }
     $lag.checkin_callback = success
     failure = fail || geo_error
         if (geo_position_js.init()) {
