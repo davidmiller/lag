@@ -36,6 +36,7 @@ class Player(models.Model):
     lairs = models.ManyToManyField('locations.Lair', null=True, blank=True,
                              default=None)
     has_lair = models.BooleanField(default=False)
+    interactions_seen = models.ManyToManyField('npcs.NPCInteraction')
 
     def __unicode__( self ):
         if self.surname and self.firstname:

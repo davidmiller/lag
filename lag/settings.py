@@ -107,7 +107,7 @@ INSTALLED_APPS = (
     'lag.players',
     'lag.locations',
     'lag.items',
-
+    'lag.npcs',
 )
 
 # Registration and accounts
