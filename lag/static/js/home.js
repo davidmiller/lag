@@ -63,9 +63,22 @@ function parse_visit_response( data ){
     $(".place").text($lag.visit_details.name);
     $("#visit_stats").html("");
     $("#visit_npcs").html("");
+    $("#visit_item").html("");
     $("#place_tmpl").tmpl($lag.visit_details.stats).appendTo("#visit_stats");
+    // NPCs
     for(var i=0; i< $lag.visit_details.npcs.length; i++){
         $("#npc_int_tmpl").tmpl($lag.visit_details.npcs[i]).appendTo("#visit_npcs");
+    }
+    // Item?
+    if($lag.visit_details.item){
+        var item = {
+            name: $lag.visit_details.item.name,
+            flavour_text: $lag.visit_details.item.flavour_text,
+            dilemma: $lag.visit_details.item.acquisition.dilemma,
+            yes: $lag.visit_details.item.acquisition.choices.yes,
+            no: $lag.visit_details.item.acquisition.choices.no
+        }
+        $("#acquisition_tmpl").tmpl(item).appendTo("#visit_item");
     }
 }
 

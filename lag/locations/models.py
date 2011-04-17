@@ -39,6 +39,9 @@ class PlaceType(models.Model):
     wizard_percentage = models.IntegerField(default=10)
     doctor_percentage = models.IntegerField(default=10)
     philosopher_percentage = models.IntegerField(default=10)
+    epic_percentage = models.IntegerField(default=0)
+    mythic_percentage = models.IntegerField(default=0)
+    artifact_percentage = models.IntegerField(default=0)
 
     def __unicode__( self ):
         return self.name

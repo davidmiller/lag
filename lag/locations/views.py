@@ -10,6 +10,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
 from lag.locations.models import Place, Visit
+from lag.items.models import Treasure, Artifact
 from lag.npcs.models import SoothSayer, Wizard, Doctor, Philosopher
 from lag.utils.shortcuts import render_to
 
@@ -100,6 +101,8 @@ def visit(request):
     place_visits = place.visit_set.all().count()
     place.visits += 1
     place.save()
+    placetype = place.placetype
+    # Place Stats
     stats = dict(
         name=place.name,
         place_created=place.created.strftime("%Y-%m-%d"),
@@ -108,12 +111,13 @@ def visit(request):
         items_found=place.items_found,
         player_visits=visit.visits
         )
+    # NPCs
     chanced = []
     npc_percs = (
-        (SoothSayer, place.placetype.soothsayer_percentage),
-        (Philosopher, place.placetype.philosopher_percentage),
-        (Doctor, place.placetype.doctor_percentage),
-        (Wizard, place.placetype.wizard_percentage),
+        (SoothSayer, placetype.soothsayer_percentage),
+        (Philosopher, placetype.philosopher_percentage),
+        (Doctor, placetype.doctor_percentage),
+        (Wizard, placetype.wizard_percentage),
         )
     for npc, percentage in npc_percs:
         if random.randrange(0, 101) < percentage:
@@ -131,7 +135,38 @@ def visit(request):
         interaction_index = random.randrange(0, interaction_count)
         npc_dict['text'] = npc.interactions.all()[interaction_index].text
         npcs.append(npc_dict)
-    return HttpResponse(json.dumps(dict(stats=stats, npcs=npcs)))
+    # Items
+    item = False
+    if random.randrange(0, 101) < placetype.epic_percentage:
+        item = Treasure.rand_epic()
+        itemtype = "Epic"
+    if not item and random.randrange(0, 101) < placetype.mythic_percentage:
+        item = Treasure.rand_mythic()
+        itemtype = "Mythic"
+    if not item and random.randrange(0, 101) < placetype.artifact_percentage:
+        item = Artifact.rand_artifact()
+        itemtype = "Artifact"
+    if item:
+        item_dict = {
+            'name': item.name,
+            'flavour_text': item.flavour_text,
+        }
+        acquisition = item.ynacquisition_set.get()
+        item_dict['acquisition'] = {
+            'dilemma': acquisition.dilemma,
+            'choices': {
+                "yes": acquisition.yes,
+                "no": acquisition.no
+                },
+            'callback': '/items/acquire/',
+            'id': item.id,
+            'type': itemtype
+            }
+
+    else:
+        item_dict = item
+    return HttpResponse(json.dumps(dict(stats=stats, npcs=npcs,
+                                        item=item_dict)))
 
 def logger(request):
     """

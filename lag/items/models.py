@@ -6,6 +6,8 @@ from datetime import date
 
 from django.db import models
 
+from lag.utils.functions import qs_rand
+
 class Item(models.Model):
     """
     Abstract base class for Items.
@@ -31,6 +33,13 @@ class Artifact(Item):
     def __unicode__( self ):
         return self.name
 
+    @staticmethod
+    def rand_artifact():
+        """
+        Return a random Artifact
+        """
+        return qs_rand(Artifact.objects.all())
+
 
 class Treasure(Item):
     """
@@ -48,6 +57,20 @@ class Treasure(Item):
 
     def __unicode__( self ):
         return self.name
+
+    @staticmethod
+    def rand_epic():
+        """
+        Return a random Epic Treasure
+        """
+        return qs_rand(Treasure.objects.filter(category="EPIC"))
+
+    @staticmethod
+    def rand_mythic():
+        """
+        Return a random Mythin Treasure
+        """
+        return qs_rand(Treasure.objects.filter(category="MYTHIC"))
 
 
 class YNAcquisition(models.Model):
