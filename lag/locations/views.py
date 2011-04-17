@@ -131,8 +131,6 @@ def visit(request):
         interaction_index = random.randrange(0, interaction_count)
         npc_dict['text'] = npc.interactions.all()[interaction_index].text
         npcs.append(npc_dict)
-
-    print npcs
     return HttpResponse(json.dumps(dict(stats=stats, npcs=npcs)))
 
 def logger(request):
