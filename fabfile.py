@@ -1,10 +1,23 @@
 """
 Fabric functions for Sysadmin and Ops
 """
+import os
+
 from fabric.api import *
-from fabric.contrib.console import confirm
 
 env.hosts = ['david@larapel.com']
+ROOT = os.path.dirname(__file__)
+
+#### Django ####
+def import_django():
+    """
+    Path hackery to connect to Django libs
+    """
+    import sys
+    in_app = os.path.join(ROOT, 'lag')
+    sys.path.append(ROOT)
+    sys.path.append(in_app)
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 def apache_reload():
     """
@@ -53,5 +66,14 @@ def deploy():
     migrate()
 #    buildout()
     restart_app()
+
+def pull_live_data():
+    """
+    Export apps as fixtures and then insert them into the local db
+    """
+    apps = ['npcs,' 'items', 'locations', 'players', 'auth']
+    filename = os.path.join(ROOT, 'utils/fixtures/dump.json')
+    command = "ssh larapel.com /home/web/lag/bin/django dumpdata %s > %s"
+    local(command % (apps, filename))
 
 
