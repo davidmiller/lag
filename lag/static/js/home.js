@@ -82,6 +82,12 @@ function parse_visit_response( data ){
     }
 }
 
+// Confirm acquisition of an item that came with a visit
+function visit_acquire(){
+    var callback = $lag.visit_details.item.acquisition.callback;
+    $.post(callback.url, callback.params, function(data){json_loads(data)});
+}
+
 $(document).ready( function(){
 
     // Automatically get location
@@ -109,6 +115,12 @@ $(document).ready( function(){
     // Confirm one of the alternatives
     $(".confirm_alt").live("click", function(){
         visit($(this).attr('id'));
+        return false;
+    });
+
+    // "Say Yes" to an Item's acquisition model
+    $("#acquire_item").live("click", function(){
+        visit_acquire();
         return false;
     });
 });

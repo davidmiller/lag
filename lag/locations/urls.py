@@ -6,4 +6,5 @@ urlpatterns = patterns(
     (r'checkin/$', 'checkin'),
     (r'register-place/$', 'register_place'),
     (r'visit/$', 'visit'),
+    (r'acquire-item', 'acquire_item'),
 )

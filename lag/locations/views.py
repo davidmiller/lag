@@ -12,6 +12,7 @@ from django.shortcuts import get_object_or_404
 from lag.locations.models import Place, Visit
 from lag.items.models import Treasure, Artifact
 from lag.npcs.models import SoothSayer, Wizard, Doctor, Philosopher
+from lag.players.models import PocketArtifact, PocketTreasure
 from lag.utils.shortcuts import render_to
 
 @render_to('locations/place_detail.html')
@@ -158,15 +159,51 @@ def visit(request):
                 "yes": acquisition.yes,
                 "no": acquisition.no
                 },
-            'callback': '/items/acquire/',
-            'id': item.id,
-            'type': itemtype
+            'callback': {
+                'url': '/locations/acquire-item/',
+                'params':{
+                    'item_id': item.id,
+                    'itemtype': itemtype,
+                    'place_id': place.id
+                    }
+                }
             }
 
     else:
         item_dict = item
     return HttpResponse(json.dumps(dict(stats=stats, npcs=npcs,
                                         item=item_dict)))
+
+@login_required
+def acquire_item(request):
+    """
+    A player has successfully completed the acquisition model
+    for an item that they found while visiting a place.
+    """
+    if not request.is_ajax():
+        return HttpResponse('No')
+    player = request.user.get_profile()
+    itemtype = request.POST['itemtype']
+    # Get the item and add it to the player's Pocket
+    if itemtype == 'Artifact':
+        item = Artifact.objects.get(pk=request.POST['item_id'])
+        pocket_item = PocketArtifact.objects.get_or_create(player=player,
+                                                           artifact=item)[0]
+        pocket_item.qty += 1
+        pocket_item.save()
+    else:
+        item = Treasure.objects.get(pk=request.POST['item_id'])
+        pocket_item = PocketTreasure.objects.get_or_create(player=player,
+                                                           artifact=item)[0]
+        pocket_item.qty += 1
+        pocket_item.save()
+    # Increment the Place's items found count
+    place = Place.objects.get(pk=request.POST['place_id'])
+    place.items_found += 1
+    place.save()
+    msg = "%s added to your pocket" % pocket_item.__unicode__()
+    acquired_msg = {'message': msg}
+    return HttpResponse(json.dumps(acquired_msg))
 
 def logger(request):
     """
