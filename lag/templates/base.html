@@ -75,6 +75,11 @@
             </div>
             <div class="contentOuterSkin modOuterSkin scrollingContents">
                 <div class="contentInnerSkin modInnerSkin" data-role="content">
+                  {% block messages %}
+                  <div id="messages">
+
+                  </div><!--messages-->
+                  {% endblock %}
                   {% block content %}
                     <h2>Welcome to LAG, stranger</h2>
                     <p>LAG, the Location-Aware Game (also Locations, Artifacts, Gamers), is a multiverse of people, swag and activity whose core interactions depend upon your real life location. Discover and create places in LAG that map to places in the physical world around you, find exotic artifacts, and interact with other gamers peopling the LAG universe to dictate and participate in adventurous narratives for the sake of action, curiosity, wanderlust, profit, mischievousness or pure malicious usurpation &#38; dominance!</p>
@@ -82,7 +87,7 @@
 
                   {% endblock %}
 
-
+<h2>Location</h2>
                                 <ul>
                                     <li>
                                         <a href="#" class="inactive">
@@ -113,7 +118,7 @@
                                         </a>
                                     </li>
                                 </ul>
-
+<h2>Artifacts</h2>
                                 <ul class="subNav">
                                     <li>
                                         <a href="#" class="inactive">
@@ -123,7 +128,7 @@
                                         </a>
                                     </li>
                                 </ul>
-
+<h2>Gamers</h2>
 
                                <ul class="subNav">
                                     <li>
@@ -155,7 +160,7 @@
                                         </a>
                                     </li>
                                 </ul>
-
+<h2>LAG</h2>
                                 <ul class="subNav">
                                     <li>
                                         <a href="#" class="expandable">
@@ -343,7 +348,7 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.js"></script>
         <script src="{{STATIC_PREFIX}}js/lib/iscroll.js"></script>
         <script src="{{STATIC_PREFIX}}js/controller.js"></script>
-        <script src="//code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.js"></script>
+        <!-- <script src="//code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.js"></script> -->
 
         <script type="text/javascript" src="{{STATIC_PREFIX}}js/lib/jquery.tmpl.js"></script>
         <script type="text/javascript" src="{{STATIC_PREFIX}}js/lib/gears_init.js"></script>

@@ -126,7 +126,7 @@
         domReady: function(){
 
             // Touch-scroll for content
-            LAG.contentScroll = new iScroll($('.contentOuterSkin')[0],{hScroll: false})
+//            LAG.contentScroll = new iScroll($('.contentOuterSkin')[0],{hScroll: false})
 
             // Make sure user doesn't screw up the UI
             _.resultingFrom(

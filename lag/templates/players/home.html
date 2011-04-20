@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
-{% block extrascripts %}
-    <script type="text/javascript" src="{{STATIC_PREFIX}}js/home.js"></script>
-{% endblock %}
+
 {% load tmpl %}
 {% block tmpl %}{{ block.super }}
     {% tmpl 'tmpl/newsitem.html' 'newsitem_tmpl' %}
 {% endblock %}
-{% block main %}
+
+{% block content %}
 <h2>News Feed</h2>
 {% for newsitem in visits %}
 {% include 'tmpl/newsitem.html' %}
@@ -67,4 +66,7 @@
     <a href="/pocket/">Your Pocket </a>
   </li>
 </ul>
+{% endblock %}
+{% block extrascripts %}
+    <script type="text/javascript" src="{{STATIC_PREFIX}}js/home.js"></script>
 {% endblock %}
