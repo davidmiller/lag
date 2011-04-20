@@ -83,3 +83,4 @@ def db_sync():
     sudo("pg_dump -f /tmp/pg.dump lag", user="postgres")
     local("scp larapel.com:/tmp/pg.dump pg.dump")
     local("sudo -u postgres psql -d lag -f pg.dump")
+    local("rm pg.dump")

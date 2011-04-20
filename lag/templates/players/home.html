@@ -7,7 +7,7 @@
 
 {% block content %}
 <h2>News Feed</h2>
-{% for newsitem in visits %}
+{% for message, icon in newsfeed %}
 {% include 'tmpl/newsitem.html' %}
 {% endfor %}
 <a href="#" id="checkin">Checkin</a>

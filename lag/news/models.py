@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 
 class NewsType(models.Model):
@@ -35,7 +37,19 @@ class NewsItem(models.Model):
     treasure = models.ForeignKey('items.Treasure', blank=True, null=True)
     artifact = models.ForeignKey('items.Artifact', blank=True, null=True)
     message = models.TextField()
+    datetime = models.DateTimeField(default=datetime.now)
 
     def __unicode__( self ):
         return self.message
 
+def news_feed(player):
+    """
+    Return the NewsItem events that will make up this player's NewsFeed
+
+    Arguments:
+    - `player`: Player
+    """
+    newsitems = NewsItem.objects.exclude(
+        player=player
+        ).order_by('-datetime')[:6]
+    return [(n.message, n.newstype.icon) for n in newsitems]

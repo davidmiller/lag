@@ -17,6 +17,7 @@ from django.shortcuts import get_object_or_404
 
 from lag.locations.models import Place, Visit, PlaceType
 from lag.items.models import Treasure, Artifact
+from lag.news.models import NewsItem, NewsType
 from lag.npcs.models import SoothSayer, Wizard, Doctor, Philosopher
 from lag.players.models import PocketArtifact, PocketTreasure
 from lag.utils.shortcuts import render_to
@@ -66,13 +67,17 @@ def checkin(request):
     else:
         area = (point, Distance(m=acc))
         places = Place.objects.filter(point__distance_lte=area)[:5]
-        visitsort = lambda x: x.visit_set.get(player=player).visits
+        def visitsort(x):
+            try:
+                return x.visit_set.get(player=player).visits
+            except Visit.DoesNotExist:
+                return 0
         s_places = sorted(places, key=visitsort)
         guess = [s_places[-1].pk, s_places[-1].name]
         alternatives = []
         s_places.reverse()
         for place in s_places:
-            if place != s_places[-1]:
+            if place.pk != guess[0]:
                 alternatives.append([place.pk, place.name])
 
     return HttpResponse(json.dumps(dict(guess=guess,
@@ -129,6 +134,13 @@ def visit(request):
     place.visits += 1
     place.save()
     placetype = place.placetype
+
+    # Let's make a NewsItem of this.
+    newsvisit = NewsType.objects.get(name="Visit")
+    newsitem = NewsItem(newstype=newsvisit, place=place, player=player,
+                        message=visit.__unicode__())
+    newsitem.save()
+
     # Place Stats
     stats = dict(
         name=place.name,
@@ -197,6 +209,7 @@ def visit(request):
 
     else:
         item_dict = item
+
     return HttpResponse(json.dumps(dict(stats=stats, npcs=npcs,
                                         item=item_dict)))
 
@@ -227,6 +240,19 @@ def acquire_item(request):
     place = Place.objects.get(pk=request.POST['place_id'])
     place.items_found += 1
     place.save()
+    # Add a news item for other players
+    news_msg = "%s found %s at %s" % (player.__unicode__(),
+                                      item.__unicode__(), place.__unicode__())
+    acquisition = NewsType.objects.get(name="Acquisition")
+    newsitem = NewsItem(newstype=acquisition, place=place, player=player,
+                        message=news_msg)
+    if itemtype == "Artifact":
+        newsitem.artifact = item
+    else:
+        newsitem.Treasure = item
+    newsitem.save()
+
+
     msg = "%s added to your pocket" % pocket_item.__unicode__()
     acquired_msg = {'message': msg}
     return HttpResponse(json.dumps(acquired_msg))
