@@ -9,7 +9,7 @@ MANAGERS = ADMINS
 
 HOSTNAME = gethostname()
 PSQL_HOSTS = ['bosch', 'parmenides', 'rasputin']
-DEBUG_HOSTS = ['parmenides', 'jung', 'rasputin', 'bosch']
+DEBUG_HOSTS = ['parmenides', 'jung', 'rasputin']
 
 # Paths
 ROOT = os.path.dirname(__file__)
