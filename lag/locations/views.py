@@ -1,3 +1,8 @@
+"""
+Views for location.
+
+Provide the XHR/JSON API for location-related LAG interactions.
+"""
 import os
 from datetime import date
 import json
@@ -65,7 +70,8 @@ def checkin(request):
         s_places = sorted(places, key=visitsort)
         guess = [s_places[-1].pk, s_places[-1].name]
         alternatives = []
-        for place in places:
+        s_places.reverse()
+        for place in s_places:
             if place != s_places[-1]:
                 alternatives.append([place.pk, place.name])
 

@@ -108,6 +108,7 @@ INSTALLED_APPS = (
     'lag.locations',
     'lag.items',
     'lag.npcs',
+    'lag.news',
 )
 
 # Registration and accounts
