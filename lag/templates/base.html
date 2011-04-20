@@ -75,127 +75,13 @@
             </div>
             <div class="contentOuterSkin modOuterSkin scrollingContents">
                 <div class="contentInnerSkin modInnerSkin" data-role="content">
-                  {% block messages %}
-                  <div id="messages">
-
-                  </div><!--messages-->
-                  {% endblock %}
+                  {% block messages %}<div id="messages"></div>{% endblock %}
                   {% block content %}
                     <h2>Welcome to LAG, stranger</h2>
                     <p>LAG, the Location-Aware Game (also Locations, Artifacts, Gamers), is a multiverse of people, swag and activity whose core interactions depend upon your real life location. Discover and create places in LAG that map to places in the physical world around you, find exotic artifacts, and interact with other gamers peopling the LAG universe to dictate and participate in adventurous narratives for the sake of action, curiosity, wanderlust, profit, mischievousness or pure malicious usurpation &#38; dominance!</p>
                     <p><strong>Make yourself known.</strong> <a href="/accounts/register/">Register</a> to create a new persona, or <a href="/accounts/login/">log in</a> to resume your existing persona's activities.</p>
-
                   {% endblock %}
-
-<h2>Location</h2>
-                                <ul>
-                                    <li>
-                                        <a href="#" class="inactive">
-                                            <span>
-                                                You aren't in any location
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <span class="navDescriptor">
-                                                Nearby locations: 3
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <span class="navDescriptor">
-                                                Recently visited: 0
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <span class="navDescriptor">
-                                                Your locations
-                                            </span>
-                                        </a>
-                                    </li>
-                                </ul>
-<h2>Artifacts</h2>
-                                <ul class="subNav">
-                                    <li>
-                                        <a href="#" class="inactive">
-                                            <span>
-                                                You have yet to discover any artifacts.
-                                            </span>
-                                        </a>
-                                    </li>
-                                </ul>
-<h2>Gamers</h2>
-
-                               <ul class="subNav">
-                                    <li>
-                                        <a href="#" class="expandable">
-                                            <span>
-                                                Your persona
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="inactive">
-                                            <span>
-                                                Characters at Picnic: 1
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="inactive">
-                                            <span>
-                                                Characters in your vicinity: 3
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="inactive">
-                                            <span>
-                                                Characters you know:
-                                            </span>
-                                        </a>
-                                    </li>
-                                </ul>
-<h2>LAG</h2>
-                                <ul class="subNav">
-                                    <li>
-                                        <a href="#" class="expandable">
-                                            <span>
-                                                Introduction to LAG
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="inactive">
-                                            <span>
-                                                FAQs
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="inactive">
-                                            <span>
-                                                Report a bug
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="inactive">
-                                            <span>
-                                                Contact LAG HQ
-                                            </span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-
-
+                    {% include 'temp_alternate_nav.html' %}
                 </div>
             </div>
 
@@ -353,7 +239,6 @@
         <script type="text/javascript" src="{{STATIC_PREFIX}}js/lib/jquery.tmpl.js"></script>
         <script type="text/javascript" src="{{STATIC_PREFIX}}js/lib/gears_init.js"></script>
         <script type="text/javascript" src="{{STATIC_PREFIX}}js/lib/geo.js"></script>
-        <script type="text/javascript" src="{{STATIC_PREFIX}}js/lag.js"></script>
         {% block extrascripts %}{% endblock %}
 
     </body>
