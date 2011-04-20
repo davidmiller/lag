@@ -6,6 +6,7 @@ import random
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.gis.geos import Point
+from django.contrib.gis.measure import Distance
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
@@ -41,16 +42,33 @@ def checkin(request):
     player = request.user.get_profile()
     lat = request.POST['lat']
     lon = request.POST['lon']
+    acc = int(request.POST['acc'])
     point = Point(x=float(lon), y=float(lat))
 
-    places = Place.objects.distance(point).order_by('distance')[:5]
-    try:
-        guess = [places[0].pk, places[0].name]
-    except IndexError:
-        guess = False
-    alternatives = []
-    for place in places[1:]:
-        alternatives.append([place.pk, place.name])
+    # If Accuracy is high, just list places very close,
+    # Otherwise, list places by # player visits to places
+    # in that area.
+    if acc < 200:
+        places = Place.objects.distance(point).order_by('distance')[:5]
+        try:
+            guess = [places[0].pk, places[0].name]
+        except IndexError:
+            guess = False
+        alternatives = []
+        for place in places[1:]:
+            alternatives.append([place.pk, place.name])
+
+    else:
+        area = (point, Distance(m=acc))
+        places = Place.objects.filter(point__distance_lte=area)[:5]
+        visitsort = lambda x: x.visit_set.get(player=player).visits
+        s_places = sorted(places, key=visitsort)
+        guess = [s_places[-1].pk, s_places[-1].name]
+        alternatives = []
+        for place in places:
+            if place != s_places[-1]:
+                alternatives.append([place.pk, place.name])
+
     return HttpResponse(json.dumps(dict(guess=guess,
                                         alternatives=alternatives)))
 

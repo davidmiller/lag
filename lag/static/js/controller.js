@@ -289,7 +289,7 @@ $('html').ajaxSend(function(event, xhr, settings) {
             // Register these as globals so that we can refer to them
             // later without having to make another geolocation call.
             $.post('/locations/checkin/',
-                   {lat: LAG.lat, lon: LAG.lon},
+                   {lat: LAG.lat, lon: LAG.lon, acc: LAG.acc},
                    function(data){
                        LAG.checkin = LAG.loads(data);
                        LAG.domAlter(function(){
