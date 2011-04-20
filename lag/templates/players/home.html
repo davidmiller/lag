@@ -35,6 +35,14 @@
     Name: <input type="text" name="new_place" value="" />
   </p>
   <p>
+    Type:
+    <select id="new_placetype">
+      {% for type in placetypes %}
+      <option value="{{type.id}}">{{ type }}</option>
+      {% endfor %}
+    </select>
+  </p>
+  <p>
     <a href="#" id="new">Register</a>
   </p>
 </div>

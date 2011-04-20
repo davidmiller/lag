@@ -9,7 +9,7 @@ from django.contrib.gis.geos import Point
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
-from lag.locations.models import Place, Visit
+from lag.locations.models import Place, Visit, PlaceType
 from lag.items.models import Treasure, Artifact
 from lag.npcs.models import SoothSayer, Wizard, Doctor, Philosopher
 from lag.players.models import PocketArtifact, PocketTreasure
@@ -63,10 +63,12 @@ def register_place(request):
         return HttpResponse('No')
     player = request.user.get_profile()
     name = request.POST['name']
+    placetype = PlaceType.objects.get(pk=request.POST['placetype'])
     lat = request.POST['lat']
     lon = request.POST['lon']
     point = Point(x=float(lon), y=float(lat))
-    place = Place(lat=lat, lon=lon, point=point, name=name, created_by=player)
+    place = Place(lat=lat, lon=lon, point=point, name=name,
+                  placetype=placetype, created_by=player)
     place.save()
     visit = Visit.objects.get_or_create(player=player, place=place)[0]
     visit.last_visited = date.today()

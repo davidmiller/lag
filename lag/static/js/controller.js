@@ -193,8 +193,7 @@ $('html').ajaxSend(function(event, xhr, settings) {
 
             // Register a new place
             $("#new").click( function(){
-                var name = $("input[name='new_place']").val();
-                LAG.newPlace(name);
+                LAG.newPlace();
                 return false;
             });
 
@@ -314,9 +313,12 @@ $('html').ajaxSend(function(event, xhr, settings) {
 
 
         /** Register a new Place */
-        newPlace: function( name ){
+        newPlace: function(){
+            var name = $("input[name='new_place']").val();
+            var placetype = $("select#new_placetype']").val();
             $.post("/locations/register-place/",
-                   {name: name, lat: LAG.lat, lon: LAG.lon},
+                   {name: name, lat: LAG.lat, lon: LAG.lon,
+                    placetype: placetype},
                    function(data){
                        confirmed_visit_response(data);
                    });
