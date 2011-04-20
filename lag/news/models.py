@@ -49,7 +49,16 @@ def news_feed(player):
     Arguments:
     - `player`: Player
     """
-    newsitems = NewsItem.objects.exclude(
+    newsqs = NewsItem.objects.exclude(
         player=player
         ).order_by('-datetime')[:6]
+    newsitems = []
+    seen_visits = []
+    for item in newsqs:
+        if item.newstype.name == "Visit":
+            if (item.place.pk, item.player.pk) not in seen_visits:
+                newsitems.append(item)
+                seen_visits.append((item.place.pk, item.player.pk))
+        else:
+            newsitems.append(item)
     return [(n.message, n.newstype.icon) for n in newsitems]

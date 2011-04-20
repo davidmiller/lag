@@ -32,11 +32,16 @@
     Or we could have no idea - register a new place
   </p>
   <p>
-    Name: <input type="text" name="new_place" value="" />
+    <label for="new_place">
+      Name:
+    </label>
+    <input type="text" name="new_place" value="" />
   </p>
   <p>
-    Type:
-    <select id="new_placetype">
+    <label for="new_placetype">
+      Type:
+    </label>
+    <select id="new_placetype" name="new_placetype">
       {% for type in placetypes %}
       <option value="{{type.id}}">{{ type }}</option>
       {% endfor %}
