@@ -194,7 +194,7 @@ def acquire_item(request):
     else:
         item = Treasure.objects.get(pk=request.POST['item_id'])
         pocket_item = PocketTreasure.objects.get_or_create(player=player,
-                                                           artifact=item)[0]
+                                                           id=item)[0]
         pocket_item.qty += 1
         pocket_item.save()
     # Increment the Place's items found count
