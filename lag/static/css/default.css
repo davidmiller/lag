@@ -1,0 +1,476 @@
+/*
+<snippet id="reset" description="reset unhelpful UA-enforced styles">
+*/
+
+        html, body, div, span, object, iframe,
+        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+        abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp,
+        small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li,
+        fieldset, form, label, legend, button, input, select, textarea,
+        table, caption, tbody, tfoot, thead, tr, th, td,
+        article, aside, canvas, details, figcaption, figure,
+        footer, header, hgroup, menu, nav, section, summary,
+        time, mark, audio, video {
+                border: 0;
+                font-size: 100%;
+                margin: 0;
+                padding: 0;
+                vertical-align: baseline;
+        }
+
+        li {
+                list-style: none;
+        }
+
+        /*
+        <snippet description="outline for focus only">
+        */
+
+                a {
+                        outline: none;
+                }
+
+                a:focus {
+                        outline: thin dotted;
+                }
+
+                a:active {
+                        outline: none;
+                }
+
+        /*
+        </snippet>
+
+        <snippet description="sensible super/subscript type layout">
+        */
+
+                sub,
+                sup {
+                        font-size: 75%;
+                        line-height: 0;
+                        position: relative;
+                }
+
+                sup {
+                        top: -0.5em;
+                }
+
+                sub {
+                        bottom: -0.25em;
+                }
+
+        /*
+        </snippet>
+
+        <snippet description="sensible type layout for whitespace-sensitive text">
+        */
+
+                code,
+                pre {
+                        white-space: pre;
+                        white-space: pre-wrap;
+                        word-break: break-all;
+                        word-wrap: break-word;
+                }
+
+        /*
+        </snippet>
+
+        <snippet description="sensible form layout / behaviour">
+        */
+
+                textarea {
+                        overflow: auto;
+                }
+
+                input[type="radio"] {
+                        vertical-align: text-bottom;
+                }
+
+                input[type="checkbox"] {
+                        vertical-align: bottom;
+                }
+
+                button {
+                        overflow: visible;
+                        width: auto;
+                }
+
+                label,
+                input[type="button"],
+                input[type="submit"],
+                input[type="image"],
+                button {
+                        cursor: pointer;
+                }
+
+        /*
+        </snippet>
+
+</snippet>
+
+<snippet description="esoteric LAG styles">
+
+        <snippet description="base elements">
+        */
+
+                html {
+                        background: #f4f4f4;
+                        color: #444;
+                        height: 100%;
+                        min-height: 100%;
+                        overflow: hidden;
+                        -webkit-text-size-adjust: none;
+                        text-size-adjust: none;
+                }
+
+                html::after {
+                        content: 'Loading...';
+                        display: block;
+                        font: 1em/1.5 sans-serif;
+                        left: 0;
+                        margin-top: -.75em;
+                        opacity: 0;
+                        position: absolute;
+                        right: 0;
+                        text-align: center;
+                        top: 50%;
+                        -moz-transition: opacity .5s ease-in-out;
+                        -o-transition: opacity .5s ease-in-out;
+                        -webkit-transition: opacity .5s ease-in-out;
+                        -ms-transition: opacity .5s ease-in-out;
+                        transition: opacity .5s ease-in-out;
+                        z-index: 1;
+                }
+
+                html.loading::after {
+                        opacity: 1;
+                }
+
+                body {
+                        font: 1em/1.5 sans-serif;
+                        height: 100%;
+                        position: relative;
+                        -moz-transition: opacity 1s ease-in-out;
+                        -o-transition: opacity 1s ease-in-out;
+                        -webkit-transition: opacity 1s ease-in-out;
+                        -ms-transition: opacity 1s ease-in-out;
+                        transition: opacity 1s ease-in-out;
+                        width: 100%;
+                }
+
+                .loading body {
+                        opacity: 0;
+                }
+
+        /*
+        </snippet>
+
+        <snippet description="common elements">
+        */
+
+        a {
+                        -moz-border-radius: .5em;
+                        -webkit-border-radius: .5em;
+                        border-radius: .5em;
+                        color: #f50;
+                        display: inline-block;
+                        -moz-outline-radius: .5em;
+                        -webkit-outline-radius: .5em;
+                        outline-radius: .5em;
+        }
+
+        p {
+                margin: .5em 0;
+        }
+
+        /*
+        </snippet>
+
+        <snippet description="navigation">
+        */
+
+        .nav .icon {
+                background: transparent no-repeat 50%;
+                -moz-background-size: 100%;
+                -o-background-size: 100%;
+                -webkit-background-size: 100%;
+                background-size: 100%;
+                opacity: .7;
+                overflow: hidden;
+                text-direction: ltr;
+                text-indent: -999em;
+        }
+
+        .subNavWrapper {
+                display: none;
+        }
+
+        .scrollingContents {
+                overflow: hidden;
+                position: relative;
+        }
+
+        .scrollingContents::before,
+        .scrollingContents::after {
+                -moz-box-shadow: 0 0 1em rgba(0,0,0,.5);
+                -webkit-box-shadow: 0 0 1em rgba(0,0,0,.5);
+                box-shadow: 0 0 1em rgba(0,0,0,.5);
+                content: ' ';
+                display: block;
+                height: 1em;
+                left: -1em;
+                position: absolute;
+                right: -1em;
+                top: -1em;
+        }
+
+        .scrollingContents::after {
+                bottom: -1em;
+                top: auto;
+        }
+
+        /*
+        </snippet>
+
+        <snippet description="unique elements">
+        */
+
+                .header,
+                .contentOuterSkin,
+                .footer {
+                        position: absolute;
+                        width: 100%;
+                }
+
+                .header,
+                .footer {
+                        z-index: 1;
+                }
+
+                .header {
+                        height: 2.5em;
+                        top: 0;
+                }
+
+                        .historyListWrapper {
+                                text-align: center;
+                                position: absolute;
+                                width: 100%;
+                        }
+
+                        .historyCurrent a {
+                                color: #444;
+                                padding: .5em .75em;
+                                text-decoration: none;
+                        }
+
+                        .historyIterator span,
+                        .historyIterator a {
+                                display: block;
+                                margin: .25em .5em;
+                        }
+
+                        .historyIterator span:first-child,
+                        .historyIterator a {
+                                float: left;
+                        }
+
+                        .historyIterator span:last-child {
+                                float: right;
+                        }
+
+                        .historyIterator .icon {
+                                height: 1.5em;
+                                opacity: .25;
+                                width: 1.5em;
+                        }
+
+                        .historyIterator span:nth-child(1) a:nth-child(1) {
+                                background-image: url(../images/arrow_earliest.png);
+                        }
+
+                        .historyIterator span:nth-child(1) a:nth-child(2) {
+                                background-image: url(../images/arrow_back.png);
+                        }
+
+                        .historyIterator span:nth-child(2) a:nth-child(1) {
+                                background-image: url(../images/arrow_forward.png);
+                        }
+
+                        .historyIterator span:nth-child(2) a:nth-child(2) {
+                                background-image: url(../images/arrow_last.png);
+                        }
+
+                .contentOuterSkin {
+                        bottom: 4em;
+                        overflow-y: scroll;
+                        top: 2.5em;
+                }
+
+                        .contentInnerSkin {
+                                padding: .5em;
+                        }
+
+                .footer {
+                        bottom: 0;
+                        height: 4em;
+                }
+
+                        .siteMapEntry {
+                                text-align: center;
+                        }
+
+                        .siteMapEntry .icon {
+                                height: 3em;
+                                margin: .5em auto;
+                                width: 3em;
+                        }
+
+                        .siteMapLocation .icon {
+                                background-image: url(../images/icon_location.png);
+                        }
+
+                        .siteMapArtifacts .icon {
+                                background-image: url(../images/icon_artifacts.png);
+                        }
+
+                        .siteMapGamers .icon {
+                                background-image: url(../images/icon_gamers.png);
+                        }
+
+                        .siteMapInformation .icon {
+                                background-image: url(../images/icon_information.png);
+                        }
+
+        /*
+        </snippet>
+
+        <snippet description="debug log">
+        */
+
+                .debugLog {
+                        bottom: .5em;
+                        left: .5em;
+                        position: fixed;
+                        right: .5em;
+                        top: .5em;
+                }
+
+                .debugLog::before,
+                .debugLog li {
+                        background: #fdd;
+                        border: 1px solid #f88;
+                        display: block;
+                        font-family: monospace;
+                        opacity: .7;
+                        overflow-y: auto;
+                        padding: .25em 1em;
+                }
+
+                .debugLog::before {
+                        content: 'Debug logger';
+                        -moz-border-radius: 1em 1em 0 0;
+                        -webkit-border-radius: 1em 1em 0 0;
+                        border-radius: 1em 1em 0 0;
+                        -moz-background-clip: padding;
+                        -webkit-background-clip: padding-box;
+                        background-clip: padding-box;
+                }
+
+                .debugLog li:last-child {
+                        -moz-border-radius: 0 0 1em 1em;
+                        -webkit-border-radius: 0 0 1em 1em;
+                        border-radius: 0 0 1em 1em;
+                        -moz-background-clip: padding;
+                        -webkit-background-clip: padding-box;
+                        background-clip: padding-box;
+                }
+
+                /* hack to compensate for jquery.mobile - to be removed */
+                .ui-loader {
+                        display: none;
+                }
+
+        /*
+        </snippet>
+
+</snippet>
+
+<snippet description="generic utility classes">
+*/
+
+        /*
+        <snippet description="accessibly hide/show elements without affecting display properties etc">
+        */
+
+                ._gone {
+                        clip: rect(1px, 1px, 1px, 1px);
+                        *clip: rect(1px 1px 1px 1px);
+                        position: absolute;
+                }
+
+                ._here {
+                        clip: auto;
+                        *clip: rect(auto);
+                        position: static;
+                }
+
+        /*
+        </snippet>
+
+        <snippet description="fractional layouts">
+        */
+                .clearfix::after,
+                .line::after,
+                .lastUnit::after {
+                        clear: both;
+                        display: block;
+                        visibility: hidden;
+                        overflow: hidden;
+                        height: 0 !important;
+                        line-height: 0;
+                        font-size: xx-large;
+                        content: " x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x ";
+                }
+
+                .clearfix,
+                .line {
+                        *zoom: 1;
+                }
+
+                .unit {
+                        float: left;
+                }
+
+                .size1of1 {
+                        float: none;
+                }
+
+                .size1of2 {width: 50%}
+                .size1of3 {width: 33.33333%}
+                .size2of3 {width: 66.66666%}
+                .size1of4 {width: 25%}
+                .size3of4 {width: 75%}
+                .size1of5 {width: 20%}
+                .size2of5 {width: 40%}
+                .size3of5 {width: 60%}
+                .size4of5 {width: 80%}
+
+                .lastUnit {
+                        display: table-cell;
+                        float: none;
+                        width: auto;
+                        *display: block;
+                        *zoom: 1;
+                        _position: relative;
+                        _left: -3px;
+                        _margin-right: -3px;
+                        }
+
+        /*
+        </snippet>
+
+/*
+</snippet>
+*/
