@@ -419,8 +419,8 @@ $('html').ajaxSend(function(event, xhr, settings) {
                     place_id: LAG.visit_details.stats.id},
                    function(data){
                        LAG.pickpocketing = LAG.loads(data);
-                   }
-                  )};
+                   });
+
         }
 
 
