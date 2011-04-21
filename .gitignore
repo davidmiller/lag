@@ -7,3 +7,5 @@ parts/*
 .installed.cfg
 *.pyc
 .ropeproject
+lag/static/newsicons
+lag/static/npcs
