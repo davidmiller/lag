@@ -267,6 +267,3 @@ def logger(request):
     with open(os.path.join(settings.ROOT, 'post.log'), 'a') as logfile:
         logfile.write(json.dumps(request.POST)+"\n")
     return HttpResponse('Yes')
-
-def foo():
-    print "BAR"
