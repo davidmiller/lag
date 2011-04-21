@@ -459,6 +459,7 @@ $('html').ajaxSend(function(event, xhr, settings) {
                            LAG.domAlter(function(){
                                // TODO remove/alter place we're banned from
                                LAG.contentPortTo("#places");
+                               $(".historyCurrent").text("LAG");
                            });
                        }
                        LAG.notify(LAG.pickpocketing.msg);
