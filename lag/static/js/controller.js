@@ -165,6 +165,19 @@ $('html').ajaxSend(function(event, xhr, settings) {
             LAG.resetViewport()
         },
 
+        // Every time you push something onto the DOM, you have to refresh
+        // iscroll. Let's do that.
+        domAlter: function(fn){
+            fn();
+            setTimeout(function (){
+                LAG.contentScroll.refresh();
+            }, 0);
+            // Probably not the greatest interaction model later, but
+            // works for now, & is better than not scrolling back up.
+            LAG.contentScroll.scrollTo(0, 0, 200);
+        },
+
+
         // The big init
         domReady: function(){
 
@@ -226,15 +239,6 @@ $('html').ajaxSend(function(event, xhr, settings) {
                 return false;
             });
 
-        },
-
-        // Every time you push something onto the DOM, you have to refresh
-        // iscroll. Let's do that.
-        domAlter: function(fn){
-            fn();
-            setTimeout(function (){
-                LAG.contentScroll.refresh();
-            }, 0);
         },
 
         // Application Logic
@@ -388,8 +392,10 @@ $('html').ajaxSend(function(event, xhr, settings) {
 
         // Redisplay the list of places available to visit
         newVisit: function(){
-            $("#visit_details:visible").hide();
-            $("#places:hidden").show();
+            LAG.domAlter(function(){
+                $("#visit_details:visible").hide();
+                $("#places:hidden").show();
+            });
         }
 
     }
