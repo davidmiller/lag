@@ -286,8 +286,10 @@ $('html').ajaxSend(function(event, xhr, settings) {
 
         // Notify the user of some event for various values of $event
         notify: function(message){
-            $("#message_tmpl").tmpl(
-                {message: message}).appendTo("#messages");
+            LAG.domAlter(function(){
+                $("#message_tmpl").tmpl(
+                    {message: message}).appendTo("#messages");
+            });
         },
 
         // When we get notifications passed back from the server, we'd
