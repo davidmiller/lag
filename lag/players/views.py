@@ -117,4 +117,4 @@ def pickpocket(request):
     place = Place.objects.get(pk=request.POST['place_id'])
     target = Player.objects.get(pk=request.POST['player_id'])
     message = pickpocketing(player, target, place)
-    return HttpResponse(json.dumps({'message': message))
+    return HttpResponse(json.dumps({'message': message}))
