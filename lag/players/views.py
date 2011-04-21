@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.gis.geos import Point
 from django.http import HttpResponseRedirect, HttpResponse
 
+from lag.items.models import Pickpocketing
 from lag.items.pickpocket import pickpocketing
 from lag.locations.models import Lair, PlaceType, Place
 from lag.news.models import news_feed
@@ -113,7 +114,8 @@ def pocket_detail(request):
         items.append(dict(name=pocketitem.item_name(), qty=pocketitem.qty))
     response = dict(items=items)
     # Do we need to inform the player of a pickpocketing incident?
-    picks = player.pickpocketing_set.filter(victim_informed=False)
+    picks = Pickpocketing.objects.filter(victim=player,
+                                         victim_informed=False)
     if picks.count() > 0:
         pick_messages = []
         for pick in picks:
