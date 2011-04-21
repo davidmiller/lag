@@ -56,11 +56,23 @@ class Place(Location):
     unique_visitors = models.IntegerField(default=0)
     items_found = models.IntegerField(default=0)
     created_by = models.ForeignKey('players.Player', null=True, blank=True)
+    current_visitors = models.ManyToManyField('players.Player',
+                                              related_name='current_visitors')
+    pickpocketings = models.IntegerField(default=0)
 
     def __unicode__(self):
         if self.name:
             return self.name
         return "Place: %s %s" % (self.lat, self.lon)
+
+    def current_json(self):
+        """
+        Return a json representation of the current players at this Place
+        """
+        current = self.current_visitors.all()
+        if current.count() == 0:
+            return False
+        return [{'name': p.__unicode__(), 'id': p.pk} for p in current]
 
 class Lair(Location):
     """

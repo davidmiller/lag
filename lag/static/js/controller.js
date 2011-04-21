@@ -239,6 +239,12 @@ $('html').ajaxSend(function(event, xhr, settings) {
                 return false;
             });
 
+            // Pickpocket a player
+            $("a.pickpocket").click( function(){
+                LAG.pickpocket(this);
+                return false;
+            });
+
         },
 
         // Application Logic
@@ -381,6 +387,11 @@ $('html').ajaxSend(function(event, xhr, settings) {
                 }
                 $("#acquisition_tmpl").tmpl(item).appendTo("#visit_item");
             }
+
+            // Current visitors?
+            if(LAG.visit_details.current_visitors){
+                $("#visitor_tmpl").tmpl(LAG.visit_details.current_visitors).appendTo("#visit_details");
+            }
         },
 
         // Confirm acquisition of an item that came with a visit
@@ -396,7 +407,20 @@ $('html').ajaxSend(function(event, xhr, settings) {
                 $("#visit_details:visible").hide();
                 $("#places:hidden").show();
             });
+        },
+
+        // Attempt to pickpocket someone
+        pickpocket: function(element){
+            var player_id = $(element).attr('player_id');
+            $.post('/players/pickpocket/',
+                   {player_id: player_id,
+                    place_id: LAG.visit_details.stats.id},
+                   function(data){
+                       LAG.pickpocketing = LAG.loads(data);
+                   }
+                  )};
         }
+
 
     }
     // Ruin user expectations

@@ -15,6 +15,7 @@ urlpatterns = patterns(
     (r'^edit-profile/$', 'players.views.edit_profile'),
     (r'^logger/$', 'locations.views.logger'),
     (r'^locations/', include('locations.urls')),
+    (r'^players/', include('players.urls')),
     (r'^$', 'lag.views.homepage'),
     (r'^accounts/', include('registration.urls')),
     (r'^admin/', include(admin.site.urls)),

@@ -102,6 +102,7 @@ INSTALLED_APPS = (
     'south',
     'django_extensions',
     'django_mobile',
+    'djcelery',
     'lag.templatetags',
     'lag.registration',
     'lag.players',
@@ -117,3 +118,12 @@ DEFAULT_FROM_EMAIL = "david@deadpansincerity.com"
 LOGIN_REDIRECT_URL = "/home/"
 AUTH_PROFILE_MODULE = 'players.Player'
 
+# Celery
+import djcelery
+djcelery.setup_loader()
+
+BROKER_HOST = "localhost"
+BROKER_PORT = 5672
+BROKER_USER = "guest"
+BROKER_PASSWORD = "guest"
+BROKER_VHOST = "/"

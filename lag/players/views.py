@@ -8,9 +8,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.gis.geos import Point
 from django.http import HttpResponseRedirect, HttpResponse
 
-from lag.locations.models import Lair, Visit, PlaceType
+from lag.items.pickpocket import pickpocketing
+from lag.locations.models import Lair, PlaceType, Place
 from lag.news.models import news_feed
 from lag.players.forms import PlayerForm
+from lag.players.models import Player
 from lag.utils.shortcuts import render_to
 
 @render_to('players/home.html')
@@ -103,3 +105,16 @@ def pocket_detail(request):
 
     return dict(player=player, pocket=pocket,
                 artifacts=artifacts, treasures=treasures)
+
+@login_required
+def pickpocket(request):
+    """
+    Make a pickpocketing attempt for a player
+    """
+    if not request.is_ajax():
+        return HttpResponse("No")
+    player = request.user.get_profile()
+    place = Place.objects.get(pk=request.POST['place_id'])
+    target = Player.objects.get(pk=request.POST['player_id'])
+    message = pickpocketing(player, target, place)
+    return HttpResponse(json.dumps({'message': message))
