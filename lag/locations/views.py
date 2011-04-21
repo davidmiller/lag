@@ -220,7 +220,6 @@ def visit(request):
 
     else:
         item_dict = item
-    print place.current_json()
     return HttpResponse(
         json.dumps(dict(stats=stats, npcs=npcs,
                         item=item_dict,
