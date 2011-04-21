@@ -48,7 +48,10 @@ def checkin(request):
     player = request.user.get_profile()
     lat = request.POST['lat']
     lon = request.POST['lon']
-    acc = int(request.POST['acc'])
+    try:
+        acc = int(request.POST['acc'])
+    except ValueError:
+        acc = float(request.POST['acc'])
     point = Point(x=float(lon), y=float(lat))
 
     # If Accuracy is high, just list places very close,
