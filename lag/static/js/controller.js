@@ -344,8 +344,6 @@ $('html').ajaxSend(function(event, xhr, settings) {
         // on successful geolocation, let's talk to the server and get some
         // local game places.
         initialCheckin: function(position) {
-            // Register these as globals so that we can refer to them
-            // later without having to make another geolocation call.
             $.post('/locations/checkin/',
                    {lat: LAG.lat, lon: LAG.lon, acc: LAG.acc},
                    function(data){
@@ -394,17 +392,13 @@ $('html').ajaxSend(function(event, xhr, settings) {
                    {place_id: place_id},
                    function(data){
                        LAG.visit_details = LAG.loads(data);
+                       LAG.hideContent();
                        LAG.domAlter(LAG.parseVisitResponse);
                    });
-            // If we're visiting a place, we can probably hide:
-            // * the news feed.
-            // * the location guesses.
-            $("#newsFeed:visible").hide();
-            $("#places:visible").hide();
         },
 
         /** Deal with the json from a confirmed visit */
-        parseVisitResponse: function( data ){
+        parseVisitResponse: function(){
 
             // Let's make sure that visit_details is showing.
             $("#visit_details:hidden").show();
