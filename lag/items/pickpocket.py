@@ -68,6 +68,8 @@ def pickpocketing(player, target, place):
     - `place`: Place
     """
     itemlist = get_items(player)
+    if len(itemlist) == 0:
+        return ("! %s didn't have anything in their pocket" % target, True)
     item = itemlist[random.randrange(0, len(itemlist))]
     if random.randrange(0, 101) > 50:
         pick = pickpocket_success(player, target, item, place)

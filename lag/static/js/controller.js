@@ -454,6 +454,7 @@ $('html').ajaxSend(function(event, xhr, settings) {
                     place_id: LAG.visit_details.stats.id},
                    function(data){
                        LAG.pickpocketing = LAG.loads(data);
+                       // Caught!
                        if(!LAG.pickpocketing.result){
                            LAG.domAlter(function(){
                                // TODO remove/alter place we're banned from
