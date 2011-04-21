@@ -2,7 +2,7 @@
 Database representations of in-game-objects
 """
 
-from datetime import date
+from datetime import date, datetime
 
 from django.db import models
 
@@ -85,3 +85,35 @@ class YNAcquisition(models.Model):
 
     def __unicode__( self ):
         return self.dilemma[:12]
+
+class Pickpocketing(models.Model):
+    """
+    A pickpocketing that has occurred
+    """
+    pickpocketer = models.ForeignKey('players.Player')
+    victim = models.ForeignKey('players.Player', related_name="victim")
+    place = models.ForeignKey('locations.Place')
+    occurred = models.DateTimeField(default=datetime.now)
+    victim_informed = models.BooleanField(default=False)
+    artifact = models.ForeignKey(Artifact, blank=True, null=True)
+    treasure = models.ForeignKey(Treasure, blank=True, null=True)
+
+    def __unicode__( self ):
+        return "A pickpocketing!"
+
+    def extract_from_pocketitem(self, item):
+        """
+        Figure out what kind of item we're pickpocketing and
+        assign it to the relevant field
+
+        Arguments:
+        - `item`: PocketItem
+        """
+        from lag.players.models import PocketArtifact, PocketTreasure
+        if isinstance(item, PocketArtifact):
+            self.artifact = item.artifact
+        elif isinstance(item, PocketTreasure):
+            self.treasure = item.treasure
+        else:
+            raise ValueError
+

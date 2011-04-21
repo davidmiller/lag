@@ -37,6 +37,7 @@ class Player(models.Model):
                              default=None)
     has_lair = models.BooleanField(default=False)
     interactions_seen = models.ManyToManyField('npcs.NPCInteraction')
+    pickpocketings = models.IntegerField(default=0)
 
     def __unicode__( self ):
         if self.surname and self.firstname:
@@ -77,6 +78,7 @@ class Pocket(models.Model):
     def __unicode__(self):
         return "%s's Pocket" % self.player.__unicode__()
 
+
 class PocketItem(models.Model):
     """
     A player stores various Items in various quantities in their Pocket.
@@ -87,6 +89,23 @@ class PocketItem(models.Model):
     class Meta:
         abstract = True
 
+    def _move_to(self, stolen):
+        """
+        ABC portion of the move functionality
+
+        Arguments:
+        - `stolen`: PocketItem
+        """
+        stolen.qty += 1
+        stolen.save()
+
+        self.qty -= 1
+        if self.qty == 0:
+            self.delete()
+        else:
+            self.save()
+
+
 class PocketArtifact(PocketItem):
     """
     Artifacts in the pocket
@@ -95,6 +114,22 @@ class PocketArtifact(PocketItem):
 
     def __unicode__( self ):
         return "PocketArtifact: %s x %s" % (self.artifact, self.qty)
+
+    def move_to(self, target):
+        """
+        Move one of ourself to `target`
+
+        Arguments:
+        - `target`: Player
+        """
+        stolen = PocketArtifact.objects.get_or_create(player=target,
+                                                      artifact=self.artifact)
+        self._move_to(stolen)
+
+    def item_desc(self):
+        "Return the artifact desc"
+        return self.artifact.name
+
 
 class PocketTreasure(PocketItem):
     """
@@ -105,3 +140,17 @@ class PocketTreasure(PocketItem):
     def __unicode__( self ):
         return "PocketTreasure: %s x %s" % (self.treasure, self.qty)
 
+    def move_to(self, target):
+        """
+        Move one of ourself to `target`
+
+        Arguments:
+        - `target`: Player
+        """
+        stolen = PocketTreasure.objects.get_or_create(player=target,
+                                                      treasure=self.treasure)
+        self._move_to(stolen)
+
+    def item_desc(self):
+        "Return the treasure desc"
+        return self.treasure.name

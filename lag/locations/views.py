@@ -4,7 +4,7 @@ Views for location.
 Provide the XHR/JSON API for location-related LAG interactions.
 """
 import os
-from datetime import date
+from datetime import date, datetime, timedelta
 import json
 import random
 
@@ -16,6 +16,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
 from lag.locations.models import Place, Visit, PlaceType
+from lag.locations.tasks import end_visit
 from lag.items.models import Treasure, Artifact
 from lag.news.models import NewsItem, NewsType
 from lag.npcs.models import SoothSayer, Wizard, Doctor, Philosopher
@@ -135,8 +136,13 @@ def visit(request):
     visit.save()
     place_visits = place.visit_set.all().count()
     place.visits += 1
+    place.current_visitors.add(player)
     place.save()
     placetype = place.placetype
+
+    # Let's register a callback to end this visit in 15 min
+    callback_time = datetime.now() + timedelta(minutes=15)
+    end_visit.apply_async(args=[place_id, player.pk], eta=callback_time)
 
     # Let's make a NewsItem of this.
     newsvisit = NewsType.objects.get(name="Visit")
@@ -146,12 +152,14 @@ def visit(request):
 
     # Place Stats
     stats = dict(
+        id=place.pk,
         name=place.name,
         place_created=place.created.strftime("%Y-%m-%d"),
         visits=place.visits,
         unique_visitors=place.unique_visitors,
         items_found=place.items_found,
-        player_visits=visit.visits
+        player_visits=visit.visits,
+        current_visitors=place.current_visitors.all().count()
         )
     # NPCs
     chanced = []
@@ -212,9 +220,12 @@ def visit(request):
 
     else:
         item_dict = item
-
-    return HttpResponse(json.dumps(dict(stats=stats, npcs=npcs,
-                                        item=item_dict)))
+    print place.current_json()
+    return HttpResponse(
+        json.dumps(dict(stats=stats, npcs=npcs,
+                        item=item_dict,
+                        current_visitors=place.current_json()))
+        )
 
 @login_required
 def acquire_item(request):
