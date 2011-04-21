@@ -61,12 +61,12 @@ def checkin(request):
     if acc < 200:
         places = Place.objects.distance(point).order_by('distance')[:5]
         try:
-            guess = [places[0].pk, places[0].name]
+            guess = {'id':places[0].pk, 'name':places[0].name}
         except IndexError:
             guess = False
         alternatives = []
         for place in places[1:]:
-            alternatives.append([place.pk, place.name])
+            alternatives.append({'id':place.pk, 'name':place.name})
 
     else:
         area = (point, Distance(m=acc))
@@ -77,12 +77,12 @@ def checkin(request):
             except Visit.DoesNotExist:
                 return 0
         s_places = sorted(places, key=visitsort)
-        guess = [s_places[-1].pk, s_places[-1].name]
+        guess = {'id':s_places[-1].pk, 'name':s_places[-1].name}
         alternatives = []
         s_places.reverse()
         for place in s_places:
-            if place.pk != guess[0]:
-                alternatives.append([place.pk, place.name])
+            if place.pk != guess['id']:
+                alternatives.append({'id':place.pk, 'name':place.name})
 
     return HttpResponse(json.dumps(dict(guess=guess,
                                         alternatives=alternatives)))
@@ -128,6 +128,11 @@ def visit(request):
     player = request.user.get_profile()
     place_id = request.POST['place_id']
     place = get_object_or_404(Place, pk=place_id)
+
+    # As a hack for dev instances, let's kick the player out of all places
+    for visiting in Place.objects.filter(current_visitors=player):
+        visiting.current_visitors.remove(player)
+
     visit = Visit.objects.get_or_create(player=player, place=place)[0]
     if visit.visits == 0:
         place.unique_visitors += 1
@@ -223,7 +228,7 @@ def visit(request):
     return HttpResponse(
         json.dumps(dict(stats=stats, npcs=npcs,
                         item=item_dict,
-                        current_visitors=place.current_json()))
+                        current_visitors=place.current_json(player)))
         )
 
 @login_required

@@ -99,12 +99,30 @@ def pocket_detail(request):
     Show me what's in your pocketsses
     """
     player = request.user.get_profile()
+    items = []
     pocket = player.pocket_set.get()
+    if pocket.has_phone:
+        items.append(dict(name="Phone", qty=1))
+    if pocket.has_camera:
+        items.append(dict(name="Camera", qty=1))
+    if pocket.has_compass:
+        items.append(dict(name="Compass", qty=1))
     artifacts = player.pocketartifact_set.all()
     treasures = player.pockettreasure_set.all()
+    for pocketitem in list(artifacts) + list(treasures):
+        items.append(dict(name=pocketitem.item_name(), qty=pocketitem.qty))
+    response = dict(items=items)
+    # Do we need to inform the player of a pickpocketing incident?
+    picks = player.pickpocketing_set.filter(victim_informed=False)
+    if picks.count() > 0:
+        pick_messages = []
+        for pick in picks:
+            pick_messages.append(pick.inform)
+            pick.victim_informed = True
+            pick.save()
+        response['message'] = pick_messages
+    return HttpResponse(json.dumps(response))
 
-    return dict(player=player, pocket=pocket,
-                artifacts=artifacts, treasures=treasures)
 
 @login_required
 def pickpocket(request):
@@ -116,5 +134,7 @@ def pickpocket(request):
     player = request.user.get_profile()
     place = Place.objects.get(pk=request.POST['place_id'])
     target = Player.objects.get(pk=request.POST['player_id'])
-    message = pickpocketing(player, target, place)
-    return HttpResponse(json.dumps({'message': message}))
+    message, result = pickpocketing(player, target, place)
+    return HttpResponse(
+        json.dumps({'msg': message,
+                    'result': result}))

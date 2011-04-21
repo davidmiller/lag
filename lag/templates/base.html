@@ -38,6 +38,8 @@
     {% tmpl 'tmpl/npc_interaction.html' 'npc_int_tmpl' %}
     {% tmpl 'tmpl/acquisition.html' 'acquisition_tmpl' %}
     {% tmpl 'tmpl/visitor.html' 'visitor_tmpl' %}
+    {% tmpl 'tmpl/nearby.html' 'nearby_tmpl' %}
+    {% tmpl 'tmpl/pocket_item.html' 'pocketitem_tmpl' %}
     {% endblock %}
   </head>
     <body>
@@ -92,7 +94,7 @@
                 <div class="navSkin modInnerSkin">
                     <ul class="nav line siteMap">
                         <li class="unit size1of4 siteMapEntry siteMapLocation">
-                            <a class="icon" href="#">
+                            <a class="icon" id="location" href="#">
                                 <span>
                                     Location
                                 </span>
@@ -131,7 +133,7 @@
                             </div>
                         </li>
                         <li class="unit size1of4 siteMapEntry siteMapArtifacts">
-                            <a class="icon" href="#">
+                            <a class="icon" id="artifacts" href="#">
                                 <span>
                                     Artifacts
                                 </span>
@@ -149,7 +151,7 @@
                             </div>
                         </li>
                         <li class="unit size1of4 siteMapEntry siteMapGamers">
-                            <a class="icon" href="#">
+                            <a class="icon" id="gamers" href="#">
                                 <span>
                                     Gamers
                                 </span>

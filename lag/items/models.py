@@ -117,3 +117,21 @@ class Pickpocketing(models.Model):
         else:
             raise ValueError
 
+    def get_item_name(self):
+        """
+        Gloss over the multiple Item models
+        """
+        if self.artifact:
+            return self.artifact.name
+        return self.treasure.name
+
+    @property
+    def inform(self):
+        """
+        The message that will be passed back to the client when we inform
+        someone that they've been pickpocketed
+        """
+        msg_tpl = "Cripes - It looks like you've been pickpocketed! %s is missing from your pocket!... "
+        return msg_tpl % self.get_item_name()
+
+

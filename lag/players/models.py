@@ -122,11 +122,11 @@ class PocketArtifact(PocketItem):
         Arguments:
         - `target`: Player
         """
-        stolen = PocketArtifact.objects.get_or_create(player=target,
-                                                      artifact=self.artifact)
+        stolen = PocketArtifact.objects.get_or_create(
+            player=target, artifact=self.artifact)[0]
         self._move_to(stolen)
 
-    def item_desc(self):
+    def item_name(self):
         "Return the artifact desc"
         return self.artifact.name
 
@@ -147,10 +147,10 @@ class PocketTreasure(PocketItem):
         Arguments:
         - `target`: Player
         """
-        stolen = PocketTreasure.objects.get_or_create(player=target,
-                                                      treasure=self.treasure)
+        stolen = PocketTreasure.objects.get_or_create(
+            player=target, treasure=self.treasure)[0]
         self._move_to(stolen)
 
-    def item_desc(self):
+    def item_name(self):
         "Return the treasure desc"
         return self.treasure.name

@@ -65,11 +65,13 @@ class Place(Location):
             return self.name
         return "Place: %s %s" % (self.lat, self.lon)
 
-    def current_json(self):
+    def current_json(self, player):
         """
         Return a json representation of the current players at this Place
+
+        `player`: Player
         """
-        current = self.current_visitors.all()
+        current = self.current_visitors.exclude(id=player.pk)
         if current.count() == 0:
             return False
         return [{'name': p.__unicode__(), 'id': p.pk} for p in current]

@@ -70,11 +70,12 @@ def pickpocketing(player, target, place):
     itemlist = get_items(player)
     item = itemlist[random.randrange(0, len(itemlist))]
     if random.randrange(0, 101) > 50:
-        pick = pickpocket_success(player, target, item)
-        return "Congratulations! You swiped a %s from %s" % (
-            item.item_desc(),
-            player)
+        pick = pickpocket_success(player, target, item, place)
+        msg =  "Congratulations! You swiped a %s from %s" % (
+            item.item_name(),
+            target)
+        return (msg, True)
     else:
         pickpocket_failure(player, target, item, place)
         msg = "%s catches you trying to steal and kicks you out of %s"
-        return msg % (player, place)
+        return (msg % (target, place), False)

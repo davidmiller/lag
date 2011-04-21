@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from lag.items.models import Artifact, Treasure, YNAcquisition
+from lag.items.models import Artifact, Treasure, YNAcquisition, Pickpocketing
 
 class YNInline(admin.StackedInline):
     """
@@ -28,3 +28,4 @@ class TreasureAdmin(ItemAdmin):
 
 admin.site.register(Artifact, ItemAdmin)
 admin.site.register(Treasure, TreasureAdmin)
+admin.site.register(Pickpocketing)

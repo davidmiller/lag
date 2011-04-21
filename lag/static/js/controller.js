@@ -197,6 +197,27 @@ $('html').ajaxSend(function(event, xhr, settings) {
 
             // Event binding for interaction events
 
+            // Menu
+            $(".icon#artifacts").click( function(){
+                LAG.pocket();
+                return false;
+            });
+            $(".icon#location").click( function(){
+                LAG.contentPortTo("#visit_details");
+                return false;
+            });
+            $(".icon#gamers").click( function(){
+                LAG.contentPortTo("#newsFeed");
+                return false;
+            });
+
+            // Top menu
+            $(".historyCurrent").click( function(){
+                LAG.contentPortTo("#places");
+                return false;
+            });
+
+
             // Manual Checkin init
             $("#checkin").click( function(){
                 LAG.checkin(LAG.initialCheckin);
@@ -209,14 +230,8 @@ $('html').ajaxSend(function(event, xhr, settings) {
                 return false;
             });
 
-            // Confirm our suggestion
-            $("#confirm_guess").click( function(){
-                LAG.visit(LAG.checkin.guess[0]);
-                return false;
-            });
-
-            // Confirm one of the alternatives
-            $(".confirm_alt").live("click", function(){
+            // Visit a place
+            $(".visit").live("click", function(){
                 LAG.visit($(this).attr('id'));
                 return false;
             });
@@ -233,14 +248,8 @@ $('html').ajaxSend(function(event, xhr, settings) {
                 return false;
             });
 
-            // Redisplay the places and hide a visit interaction
-            $(".historyCurrent").click( function(){
-                LAG.newVisit();
-                return false;
-            });
-
             // Pickpocket a player
-            $("a.pickpocket").click( function(){
+            $(".pickpocket").live("click", function(){
                 LAG.pickpocket(this);
                 return false;
             });
@@ -287,8 +296,16 @@ $('html').ajaxSend(function(event, xhr, settings) {
         // Notify the user of some event for various values of $event
         notify: function(message){
             LAG.domAlter(function(){
-                $("#message_tmpl").tmpl(
-                    {message: message}).appendTo("#messages");
+                $("#messages").html("");
+                if($.isArray(message)){
+                    for( var i=0; i < message.length; i++){
+                        $("#message_tmpl").tmpl(
+                            {message: message[i]}).appendTo("#messages");
+                    };
+                }else{
+                    $("#message_tmpl").tmpl(
+                        {message: message}).appendTo("#messages");
+                }
             });
         },
 
@@ -305,7 +322,26 @@ $('html').ajaxSend(function(event, xhr, settings) {
         },
 
 
-        // On successful geolocation, let's talk to the server and get some
+        // Generic hide all contentPort
+        hideContent: function(){
+            LAG.domAlter(function(){
+                $("#messages").html("");
+                $("#visit_details:visible").hide();
+                $("#newsFeed:visible").hide();
+                $("#pocket:visible").hide();
+                $("#places:visible").hide();
+            });
+        },
+
+        // Sometimes we'll want to jump to a contentPort div.
+        // Take a jquery selector as an arg, hideContent,
+        // then show `selector`
+        contentPortTo: function(selector){
+            LAG.hideContent();
+            $(selector).show();
+        },
+
+        // on successful geolocation, let's talk to the server and get some
         // local game places.
         initialCheckin: function(position) {
             // Register these as globals so that we can refer to them
@@ -315,24 +351,30 @@ $('html').ajaxSend(function(event, xhr, settings) {
                    function(data){
                        LAG.checkin = LAG.loads(data);
                        LAG.domAlter(function(){
-                           var alternat_holder = $("#alternatives");
                            $("#lat").text(LAG.lat);
                            $("#lon").text(LAG.lon);
                            $("#acc").text(LAG.acc);
-                           $("#guess").text(LAG.checkin.guess[1]);
-
-                           for( var i=0; i < LAG.checkin.alternatives.length; i++){
-                               var alt_p = "<p>"+LAG.checkin.alternatives[i][1]+"<p>";
-                               alt_p += '<p><a href="#" class="confirm_alt" id="';
-                               alt_p += LAG.checkin.alternatives[i][0]+'">Visit</a></p><hr />';
-                               $(alternat_holder).append(alt_p);
-                           }
+                           $("#nearby_tmpl").tmpl(LAG.checkin.guess).appendTo("#guess");
+                           $("#nearby_tmpl").tmpl(LAG.checkin.alternatives).appendTo("#alternatives");
                        });
                    });
         },
 
         // Interactions:
 
+        // Menu
+        pocket: function(){
+            LAG.hideContent();
+            $.post("/pocket/",
+                   function(data){
+                       var response = LAG.loads(data);
+                       LAG.domAlter(function(){
+                           $("#pocketItems").html("");
+                           $("#pocketitem_tmpl").tmpl(response.items).appendTo("#pocketItems");
+                           $("#pocket").show();
+                       });
+                   });
+        },
 
         /** Register a new Place */
         newPlace: function(){
@@ -370,6 +412,7 @@ $('html').ajaxSend(function(event, xhr, settings) {
             $("#visit_stats").html("");
             $("#visit_npcs").html("");
             $("#visit_item").html("");
+            $("#visit_current").html("");
 
             $(".place").text(LAG.visit_details.stats.name);
             $(".historyCurrent").text(LAG.visit_details.stats.name);
@@ -392,7 +435,7 @@ $('html').ajaxSend(function(event, xhr, settings) {
 
             // Current visitors?
             if(LAG.visit_details.current_visitors){
-                $("#visitor_tmpl").tmpl(LAG.visit_details.current_visitors).appendTo("#visit_details");
+                $("#visitor_tmpl").tmpl(LAG.visit_details.current_visitors).appendTo("#visit_current");
             }
         },
 
@@ -403,14 +446,6 @@ $('html').ajaxSend(function(event, xhr, settings) {
                    function(data){LAG.loads(data)});
         },
 
-        // Redisplay the list of places available to visit
-        newVisit: function(){
-            LAG.domAlter(function(){
-                $("#visit_details:visible").hide();
-                $("#places:hidden").show();
-            });
-        },
-
         // Attempt to pickpocket someone
         pickpocket: function(element){
             var player_id = $(element).attr('player_id');
@@ -419,6 +454,13 @@ $('html').ajaxSend(function(event, xhr, settings) {
                     place_id: LAG.visit_details.stats.id},
                    function(data){
                        LAG.pickpocketing = LAG.loads(data);
+                       if(!LAG.pickpocketing.result){
+                           LAG.domAlter(function(){
+                               // TODO remove/alter place we're banned from
+                               LAG.contentPortTo("#places");
+                           });
+                       }
+                       LAG.notify(LAG.pickpocketing.msg);
                    });
 
         }
