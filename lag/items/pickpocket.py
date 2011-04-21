@@ -67,7 +67,7 @@ def pickpocketing(player, target, place):
     - `target`: Player
     - `place`: Place
     """
-    itemlist = get_items(player)
+    itemlist = get_items(target)
     if len(itemlist) == 0:
         return ("! %s didn't have anything in their pocket" % target, True)
     item = itemlist[random.randrange(0, len(itemlist))]
