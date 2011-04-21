@@ -170,7 +170,6 @@ $('html').ajaxSend(function(event, xhr, settings) {
 
             // Touch-scroll for content
             LAG.contentScroll = new iScroll($('.contentOuterSkin')[0],{hScroll: false})
-
             // Make sure user doesn't screw up the UI
             _.resultingFrom(
                 LAG.resetViewport,[
@@ -215,6 +214,17 @@ $('html').ajaxSend(function(event, xhr, settings) {
                 return false;
             });
 
+            // Display the register place form
+            $("#showRegisterPlace").click(function(){
+                $("#newPlaceForm").css({display: "block"});
+                return false;
+            });
+
+            // Redisplay the places and hide a visit interaction
+            $(".historyCurrent").click( function(){
+                LAG.newVisit();
+                return false;
+            });
 
         },
 
@@ -302,7 +312,7 @@ $('html').ajaxSend(function(event, xhr, settings) {
                            for( var i=0; i < LAG.checkin.alternatives.length; i++){
                                var alt_p = "<p>"+LAG.checkin.alternatives[i][1]+"<p>";
                                alt_p += '<p><a href="#" class="confirm_alt" id="';
-                               alt_p += LAG.checkin.alternatives[i][0]+'">Confirm</a></p><hr />';
+                               alt_p += LAG.checkin.alternatives[i][0]+'">Visit</a></p><hr />';
                                $(alternat_holder).append(alt_p);
                            }
                        });
@@ -332,15 +342,25 @@ $('html').ajaxSend(function(event, xhr, settings) {
                        LAG.visit_details = LAG.loads(data);
                        LAG.domAlter(LAG.parseVisitResponse);
                    });
+            // If we're visiting a place, we can probably hide:
+            // * the news feed.
+            // * the location guesses.
+            $("#newsFeed:visible").hide();
+            $("#places:visible").hide();
         },
 
         /** Deal with the json from a confirmed visit */
         parseVisitResponse: function( data ){
 
-            $(".place").text(LAG.visit_details.stats.name);
+            // Let's make sure that visit_details is showing.
+            $("#visit_details:hidden").show();
+            // Let's clear any previous visit interactions.
             $("#visit_stats").html("");
             $("#visit_npcs").html("");
             $("#visit_item").html("");
+
+            $(".place").text(LAG.visit_details.stats.name);
+            $(".historyCurrent").text(LAG.visit_details.stats.name);
             $("#place_tmpl").tmpl(LAG.visit_details.stats).appendTo("#visit_stats");
             // NPCs
             for(var i=0; i< LAG.visit_details.npcs.length; i++){
@@ -364,6 +384,12 @@ $('html').ajaxSend(function(event, xhr, settings) {
             var callback = LAG.visit_details.item.acquisition.callback;
             $.post(callback.url, callback.params,
                    function(data){LAG.loads(data)});
+        },
+
+        // Redisplay the list of places available to visit
+        newVisit: function(){
+            $("#visit_details:visible").hide();
+            $("#places:hidden").show();
         }
 
     }

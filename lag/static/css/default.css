@@ -343,9 +343,18 @@
                                 background-image: url(../images/icon_information.png);
                         }
 
-                        .newsitem {
+                        .newsicon {
                                 height: 1.5em;
                                 width: 1.5em;
+                        }
+
+                        .npcicon {
+                            height: 2em;
+                            width: 2em;
+                        }
+
+                        #newPlaceForm {
+                            display: none;
                         }
         /*
         </snippet>
