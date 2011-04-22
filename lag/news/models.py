@@ -61,4 +61,4 @@ def news_feed(player):
                 seen_visits.append((item.place.pk, item.player.pk))
         else:
             newsitems.append(item)
-    return [(n.message, n.newstype.icon) for n in newsitems]
+    return [(n.message, n.newstype.icon.url) for n in newsitems]

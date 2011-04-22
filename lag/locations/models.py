@@ -101,3 +101,15 @@ class Visit(models.Model):
         msg_tpl = "%s visited %s at %s for the %sth time"
         return msg_tpl % (self.player.__unicode__(), self.place.__unicode__(),
                           self.last_visited, self.visits)
+
+class WallNote(models.Model):
+    """
+    Comments left on the walls of places
+    """
+    place = models.ForeignKey(Place)
+    player = models.ForeignKey('players.Player')
+    created = models.DateTimeField(default=datetime.now)
+    note = models.TextField()
+
+    def __unicode__( self ):
+        return self.note[:15]

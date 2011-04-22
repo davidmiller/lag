@@ -111,7 +111,8 @@ def pocket_detail(request):
     artifacts = player.pocketartifact_set.all()
     treasures = player.pockettreasure_set.all()
     for pocketitem in list(artifacts) + list(treasures):
-        items.append(dict(name=pocketitem.item_name(), qty=pocketitem.qty))
+        items.append(dict(name=pocketitem.item_name(), qty=pocketitem.qty,
+                          flavour_text=pocketitem.item_desc))
     response = dict(items=items)
     # Do we need to inform the player of a pickpocketing incident?
     picks = Pickpocketing.objects.filter(victim=player,
@@ -140,3 +141,25 @@ def pickpocket(request):
     return HttpResponse(
         json.dumps({'msg': message,
                     'result': result}))
+@login_required
+def player_detail(request):
+    """
+    Return the player's details
+    """
+    if not request.is_ajax():
+        return HttpResponse("No")
+    player = Player.objects.get(pk=request.POST['player_id'])
+    news = player.newsitem_set.all()
+    if news.count() == 0:
+        newsitems = False
+    else:
+        newsitems = []
+        for item in news:
+            newsitems.append(dict(message=item.message,
+                                  icon=item.icon.url))
+    places_visited = player.visit_set.all().count()
+
+    return HttpResponse(json.dumps(dict(newsitems=newsitems,
+                                        id=player.pk,
+                                        name=player.__unicode__(),
+                                        places_visited=places_visited)))

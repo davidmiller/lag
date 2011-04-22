@@ -8,8 +8,8 @@ ADMINS = (
 MANAGERS = ADMINS
 
 HOSTNAME = gethostname()
-PSQL_HOSTS = ['bosch', 'parmenides', 'rasputin']
-DEBUG_HOSTS = ['parmenides', 'jung', 'rasputin']
+PSQL_HOSTS = ['bosch', 'parmenides', 'rasputin', 'ubuntu']
+DEBUG_HOSTS = ['parmenides', 'jung', 'rasputin', 'ubuntu']
 
 # Paths
 ROOT = os.path.dirname(__file__)
@@ -45,7 +45,7 @@ DATABASES = {
 }
 if HOSTNAME not in PSQL_HOSTS:
     DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
-    DATABASES['default']['NAME'] = ROOT.child('lag.db')
+    DATABASES['default']['NAME'] = os.path.join(ROOT, 'lag.db')
     DATABASES['default']['USER'] = ''
     DATABASES['default']['PASSWORD'] = ''
 

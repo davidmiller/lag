@@ -127,8 +127,13 @@ class PocketArtifact(PocketItem):
         self._move_to(stolen)
 
     def item_name(self):
-        "Return the artifact desc"
+        "Return the artifact name"
         return self.artifact.name
+
+    @property
+    def item_desc(self):
+        "Return the artifact desc"
+        return self.artifact.flavour_text
 
 
 class PocketTreasure(PocketItem):
@@ -154,3 +159,8 @@ class PocketTreasure(PocketItem):
     def item_name(self):
         "Return the treasure desc"
         return self.treasure.name
+
+    @property
+    def item_desc(self):
+        "Return the treasure desc"
+        return self.treasure.flavour_text
