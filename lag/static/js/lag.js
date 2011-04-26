@@ -1,19 +1,21 @@
 //
 // lag.js
 //
+// Author Barney Carroll <barney.carroll at gmail.com>
 // Author David Miller <david at deadpansincerity.com>
 //
-// LAG prototype global library functions
+// LAG prototype global library functions.
 //
-// Modify jQuery's AJAX methods to allow us to pass the CSRF hash as a
-// request header.
+// The contents of this file are not application specific in terms
+// of logic, DOM or data manipulation.
 //
-// Provide site-wide checkin function and client side messages
+// Configuration/alteration of jQuery on an app-global state, for the
+// initialisation of js-based scrolling and CSRF XHR headers.
 //
-
-// Shall we have one global variable bucket to not pollute the namespace?
-var $lag = {}
-$lag.checkins = [];
+// Utility functions bound to __$
+//
+// Also - let's have js Error Classes!
+//
 
 // XHR
 
@@ -26,7 +28,9 @@ $('html').ajaxSend(function(event, xhr, settings) {
                 var cookie = jQuery.trim(cookies[i]);
                 // Does this cookie string begin with the name we want?
                 if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    cookieValue = decodeURIComponent(
+                        cookie.substring(name.length + 1)
+                    );
                     break;
                 }
             }
@@ -39,51 +43,119 @@ $('html').ajaxSend(function(event, xhr, settings) {
     }
 });
 
-// Notify the user of some event for various values of $event
-function notify(message){
-    $("#message_tmpl").tmpl({message: message}).appendTo("#messages");
-}
 
-// When we get notifications passed back from the server, we'd like to
-// deal with that, and then pass on whatever else was contained in the JSON
-function json_loads(data){
-    var json = $.parseJSON(data);
-    if ('message' in json){
-        notify(json.message);
-        delete json.message;
-    }
-    return json
-}
+(function(undefined){
+    // Generic utility belt
+    __$ = {
 
-// Geolocation
+        // Push to a log in the DOM. For performance, should be invoked::
+        // __$debug && __$debug.log('hello devs')
+        debug: (function(){
 
-/** oops */
-function geo_error(){
-    notify("Geolocation not enabled - check your settings");
-}
+            // Set debug mode via a hash query eg www.some.thing/#debug&hai
+            if(/\bdebug\b/.test(location.hash)) return false
 
+            // Create a DOM object for the log & a method for creating entries
+            var entries = $('ul.debugLog').appendTo('body'),
+                enter = function(x){
+                    return '<li' + (x[1] ? ' class="error"' : '') + '>' + x[0] + '</li>'
+                },
+                entry
 
-// Pretty much every geolocation, we're going to want to store the results.
-function checkin_success(position){
-    $lag.lat = position.coords.latitude;
-    $lag.lon = position.coords.longitude;
-    $lag.acc = position.coords.accuracy;
-    $lag.checkin_callback(position);
-}
+            // Try the expression, log results, append to DOM
+            return function log(x){
+                try{
+                    entry=enter(x)
+                }
+                catch(e){
+                    entry=enter(e,true)
+                }
 
-//
-// Perform a checkin.
-// Push the current geo data into $lag.checkins if any exists.
-// Then perform the `success` fn.
-// If an error occurs, call the optional `fail` fn, or `geo_error`
-//
-function checkin(success, fail){
-    if( $lag.lat && $lag.lon && $lag.acc){
-        $lag.checkins.push({lat:$lag.lat, lon:$lag.lon, acc:$lag.acc})
-    }
-    $lag.checkin_callback = success
-    failure = fail || geo_error
-        if (geo_position_js.init()) {
-            geo_position_js.getCurrentPosition(checkin_success, failure);
+                entries.append(entry)
+            }
+        }()),
+
+        // If x isn't already an array, make it one with its previous self
+        // as the only child. Usefull for loops through +=1 objects.
+        arrayify: function(x){
+            return $.isArray(x) ? x : [x]
+        },
+
+        // Bind events the other way round.
+        // {result} takes functions, {cause} takes arrays of format:
+        // [{elements}[selector string],{events}[string],
+        // {unbind}[optional,boolean]]
+        // {result} is bound or unbound to the elements & respective
+        // events provided
+        resultingFrom: function(result,cause){
+            result = __$arrayify(result)
+            cause = __$arrayify(cause)
+
+            $.each(cause,function(i,x){
+                $.each(result,function(i,y){
+                    if(link = x[2])
+                        $(x[0]).unbind(x[1],y)
+                    else
+                        $(x[0]).bind(x[1],y)
+                })
+            })
         }
+    }
+
+
+
+    // Extend jQuery
+    $.fn.extend({
+
+        // Init, live config & unbinding of iScroll (touchscroll) via $
+        // (instead of storing iScroll instances somewhere arbitrary)
+        iScroll: function(){
+            var THIS = this,
+                args = Array.prototype.slice.call(arguments),
+                methods = [
+                    'destroy',
+                    'refresh',
+                    'scrollTo',
+                    'scrollToElement',
+                    'scrollToPage'
+                ]
+
+            THIS.each(function(){
+                if(!this.iScroll){
+                    this.iScroll = new iScroll.apply(
+                        null, args.concat(
+                            Array.prototype.slice.call(arguments)
+                        )
+                    )
+                }
+            })
+
+            $.each(methods,function(i,x){
+                methods[i] = function(){
+                    THIS.each(function(){
+                        this.iScroll.apply(
+                            null, args.concat(
+                                Array.prototype.slice.call(arguments)
+                            )
+                        )
+                    })
+                }
+            })
+
+            return methods
+        }
+    })
+    // Ruin user expectations
+    document.addEventListener('touchmove',
+                              function(e){e.preventDefault()}, false)
+
+
+}())
+
+
+// Let's behave nicely for certain classes of error
+function NotImplementedError(feature){
+    this.name = "NotImplementedError",
+    this.message = feature || "This feature";
 }
+NotImplementedError.prototype = Error.prototype;

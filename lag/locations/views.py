@@ -58,15 +58,16 @@ def checkin(request):
     # If Accuracy is high, just list places very close,
     # Otherwise, list places by # player visits to places
     # in that area.
+    to_json = []
     if acc < 200:
         places = Place.objects.distance(point).order_by('distance')[:5]
         try:
-            guess = {'id':places[0].pk, 'name':places[0].name}
+            place = places[0]
+            to_json.append(place.stats(guess=True))
         except IndexError:
-            guess = False
-        alternatives = []
+            pass
         for place in places[1:]:
-            alternatives.append({'id':place.pk, 'name':place.name})
+            to_json.append(place.stats(guess=False))
 
     else:
         area = (point, Distance(m=acc))
@@ -77,15 +78,14 @@ def checkin(request):
             except Visit.DoesNotExist:
                 return 0
         s_places = sorted(places, key=visitsort)
-        guess = {'id':s_places[-1].pk, 'name':s_places[-1].name}
-        alternatives = []
+        to_json.append(s_places[-1].stats(guess=True))
+        guess_id = s_places[-1].pk
         s_places.reverse()
         for place in s_places:
-            if place.pk != guess['id']:
-                alternatives.append({'id':place.pk, 'name':place.name})
+            if place.pk != guess_id:
+                to_json.append(place.stats(guess=False))
 
-    return HttpResponse(json.dumps(dict(guess=guess,
-                                        alternatives=alternatives)))
+    return HttpResponse(json.dumps(to_json))
 
 @login_required
 def register_place(request):
@@ -154,17 +154,7 @@ def visit(request):
     newsitem.save()
 
     # Place Stats
-    stats = dict(
-        id=place.pk,
-        name=place.name,
-        place_created=place.created.strftime("%Y-%m-%d"),
-        visits=place.visits,
-        unique_visitors=place.unique_visitors,
-        items_found=place.items_found,
-        player_visits=visit.visits,
-        current_visitors=place.current_visitors.all().count(),
-        wall=place.wallnote_set.all().count()
-        )
+    place_detail = dict(id=place.pk)
     # NPCs
     chanced = []
     npc_percs = (
@@ -225,11 +215,10 @@ def visit(request):
 
     else:
         item_dict = item
-    return HttpResponse(
-        json.dumps(dict(stats=stats, npcs=npcs,
-                        item=item_dict,
-                        current_visitors=place.current_json(player)))
-        )
+    place_detail['npcs'] = npcs
+    place_detail['item'] = item_dict
+    place_detail['current_visitors'] = place.current_json(player)
+    return HttpResponse(json.dumps(place_detail))
 
 @login_required
 def acquire_item(request):

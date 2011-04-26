@@ -6,91 +6,17 @@
 {% endblock %}
 
 {% block content %}
-<div id="newsFeed">
-  <h2>News Feed</h2>
-  {% for message, icon in newsfeed %}
-  {% include 'tmpl/newsitem.html' %}
-  {% endfor %}
-</div><!--newsFeed-->
-<div id="places">
-  <a href="#" id="checkin">Checkin</a>
-  <p>
-    You are at Lat: <span id="lat"></span> Lon: <span id="lon"></span>
-  </p>
-  <p>
-    This was determined with an accuracy of: <span id="acc"></span>
-  </p>
-  <div id="guesses">
-    <p>We think that you are at <span id="guess"></span></p>
-    <p>Alternatively this could be:</p>
-    <div id="alternatives">
-    </div><!--alternatives-->
-    <div id="register_place">
-      <p>
-        Or we could have no idea - <a href="#" id="showRegisterPlace">register a new place</a>
-      </p>
-      <form id="newPlaceForm">
-        <p>
-          <label for="new_place">
-            Name:
-          </label>
-          <input type="text" name="new_place" value="" />
-        </p>
-        <p>
-          <label for="new_placetype">
-            Type:
-          </label>
-          <select id="new_placetype" name="new_placetype">
-            {% for type in placetypes %}
-            <option value="{{type.id}}">{{ type }}</option>
-            {% endfor %}
-          </select>
-        </p>
-        <p>
-          <a href="#" id="new">Register</a>
-        </p>
-      </form>
-    </div><!--register_place-->
-  </div> <!-- guesses -->
-</div><!--places-->
+<!-- Fill me with JS innit -->
+<div id="placeList">
 
-<div id="visit_details">
-  <p>You are currently visiting <span class="place"></span></p>
-  <div id="visit_stats">
-
-  </div><!--visit_stats-->
-  <hr />
-  <div id="visit_npcs">
-
-  </div><!--visit_npcs-->
-  <div id="visit_item">
-
-  </div><!--visit_item-->
-  <div id="visit_current">
-
-  </div><!--visit_current-->
-</div><!--visit_details-->
+</div><!--placeList-->
 
 <div id="pocket">
-  <h2>Your Pocket</h2>
-  <div id="pocketItems">
 
-  </div><!--pocketItems-->
 </div><!--pocket-->
 
-{% endblock %}
-{% block resources %}
-<ul>
-  <li>
-    <a href="/edit-profile/">Edit your profile</a>
-  </li>
-  <li>
-    <a href="/lair/">
-      {% if not player.has_lair %}Set y{% else %}Y{% endif %}our lair
-    </a>
-  </li>
-  <li>
-    <a href="/pocket/">Your Pocket </a>
-  </li>
-</ul>
+<div id="visit">
+<h2>Visit</h2>
+</div><!--visit-->
+
 {% endblock %}

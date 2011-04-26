@@ -357,7 +357,33 @@
                             display: none;
                         }
 
+                        .modalItem{
+                            background: white;
+                            height: 700px;
+                            position: absolute;
+                            width: 100%;
+                            top: 40px;
+                        }
+
                         #pocket {
+                            display: none;
+                        }
+
+                        .pocketItem .flavour{
+                            display: none;
+                        }
+
+                        .place .placeStats{
+                            display: none;
+                        }
+
+                        #visit{
+                            display: none;
+                        }
+
+                        .itemAcquisition .yes,
+                        .itemAcquisition .no,
+                        .itemAcquisition .flavourText{
                             display: none;
                         }
         /*

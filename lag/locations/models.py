@@ -65,6 +65,23 @@ class Place(Location):
             return self.name
         return "Place: %s %s" % (self.lat, self.lon)
 
+    def stats(self, **kwargs):
+        """
+        Take kwargs as extra content, then return a stats dict for the
+        front end JSON API
+        """
+        kwargs['id'] = self.pk
+        kwargs['name'] = self.name
+        kwargs['place_created'] = self.created.strftime("%Y-%m-%d")
+        kwargs['visits'] = self.visits
+        kwargs['unique_visitors'] = self.unique_visitors
+        kwargs['items_found'] = self.items_found
+        kwargs['current_visitors'] = self.current_visitors.all().count()
+        kwargs['wall'] = self.wallnote_set.all().count()
+        return kwargs
+
+
+
     def current_json(self, player):
         """
         Return a json representation of the current players at this Place

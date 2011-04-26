@@ -1,12 +1,26 @@
-<div class="item_acquisition">
-  <p>Item: {{ name }}</p>
-  <p>{{ flavour_text }}</p>
-  <p>{{ dilemma }}</p>
-  <p>
-    {{ yes }}
+<div class="itemAcquisition">
+  <p class="dilemma">
+    {{ dilemma }}
     <br />
-    <a href="#" id="acquire_item">Confirm Yes</a>
+      <a href="#" class="sayYes">Yes</a>
+      <a href="#" class="sayNo">No</a>
   </p>
-  <p>{{ no }}</p>
+
+  <p class="yes">
+    {{ yes }}
+      <a href="#" class="acquired">Continue</a>
+  </p>
+  <p class="no">
+    {{ no }}
+      <a href="#" class="modalDone">Ok</a>
+  </p>
+  <div class="flavourText">
+    <p>Wow! You found:: {{ name }}</p>
+    {{ flavour_text }}
+
+    <p>
+      <a href="#" class="modalDone">Ok</a>
+    </p>
+
+  </div>
 </div>
-<hr />
