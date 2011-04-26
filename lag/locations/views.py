@@ -114,8 +114,6 @@ def register_place(request):
         )
     return HttpResponse(json.dumps(params))
 
-    return HttpResponse()
-
 @login_required
 def visit(request):
     """
@@ -164,7 +162,8 @@ def visit(request):
         unique_visitors=place.unique_visitors,
         items_found=place.items_found,
         player_visits=visit.visits,
-        current_visitors=place.current_visitors.all().count()
+        current_visitors=place.current_visitors.all().count(),
+        wall=place.wallnote_set.all().count()
         )
     # NPCs
     chanced = []
@@ -187,9 +186,10 @@ def visit(request):
             "icon": icon
             }
         interaction_count = npc.interactions.all().count()
-        interaction_index = random.randrange(0, interaction_count)
-        npc_dict['text'] = npc.interactions.all()[interaction_index].text
-        npcs.append(npc_dict)
+        if interaction_count > 0:
+            interaction_index = random.randrange(0, interaction_count)
+            npc_dict['text'] = npc.interactions.all()[interaction_index].text
+            npcs.append(npc_dict)
     # Items
     item = False
     if random.randrange(0, 101) < placetype.epic_percentage:
@@ -274,6 +274,23 @@ def acquire_item(request):
     msg = "%s added to your pocket" % pocket_item.__unicode__()
     acquired_msg = {'message': msg}
     return HttpResponse(json.dumps(acquired_msg))
+
+@login_required
+def wall(request):
+    """
+    Return all the WallNotes for a place
+    """
+    if not request.is_ajax:
+        return HttpResponse("No")
+    place = Place.objects.get(pk=request.POST['place_id'])
+    wallitems = place.wallnote_set.all()
+    if wallitems.count() == 0:
+        return HttpResponse(json.dumps(dict(notes=False)))
+    notes = []
+    for note in wallitems:
+        note.append(dict(player_name=note.player.__unicode__(),
+                         created=note.created, note=note.note))
+    return HttpResponse(json.dumps(dict(notes=notes)))
 
 def logger(request):
     """

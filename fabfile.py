@@ -81,6 +81,6 @@ def db_sync():
     Get the live db totally
     """
     sudo("pg_dump -f /tmp/pg.dump lag", user="postgres")
-    local("scp larapel.com:/tmp/pg.dump pg.dump")
+    local("scp david@larapel.com:/tmp/pg.dump pg.dump")
     local("sudo -u postgres psql -d lag -f pg.dump")
     local("rm pg.dump")
