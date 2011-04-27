@@ -1,22 +1,25 @@
 {% extends 'base.html' %}
 
 {% load tmpl %}
-{% block tmpl %}{{ block.super }}
-    {% tmpl 'tmpl/newsitem.html' 'newsitem_tmpl' %}
+{% block tmpl %}
+    {% tmpl 'tmpl/modal.html'           'modalTmpl' %}
+    {% tmpl 'tmpl/newsfeed.html'        'newsfeedTmpl' %}
+    {% tmpl 'tmpl/newsitem.html'        'newsitemTmpl' %}
+    {% tmpl 'tmpl/nearby.html'          'nearbyTmpl' %}
+    {% tmpl 'tmpl/nearbyplace.html'     'nearbyPlaceTmpl' %}
+    {% tmpl 'tmpl/place_detail.html'    'placeTmpl' %}
+    {% tmpl 'tmpl/pocket.html'          'pocketTmpl' %}
+    {% tmpl 'tmpl/pocket.html'          'pocketTmpl' %}
+    {% tmpl 'tmpl/pocket_item.html'     'pocketItemTmpl' %}
+    {% tmpl 'tmpl/visit_detail.html'    'visitTmpl' %}
+    {% tmpl 'tmpl/npc_interaction.html' 'visitNPCTmpl' %}
+    {% tmpl 'tmpl/acquisition.html'     'acquisitionTmpl' %}
+
 {% endblock %}
 
 {% block content %}
 <!-- Fill me with JS innit -->
-<div id="placeList">
+<div id="LAG">
 
-</div><!--placeList-->
-
-<div id="pocket">
-
-</div><!--pocket-->
-
-<div id="visit">
-<h2>Visit</h2>
-</div><!--visit-->
-
+</div><!--LAG-->
 {% endblock %}

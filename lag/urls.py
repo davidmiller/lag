@@ -10,6 +10,7 @@ urlpatterns = patterns(
     (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to',
      {'url': '/m/images/favicon.ico'}),
     (r'^home/$', 'players.views.home'),
+    (r'^newsfeed$', 'news.views.newsfeed'),
     (r'^lair/$', 'players.views.lair_detail'),
     (r'^pocket/$', 'players.views.pocket_detail'),
     (r'^edit-profile/$', 'players.views.edit_profile'),

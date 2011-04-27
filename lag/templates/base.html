@@ -33,16 +33,7 @@
     {% block extrahead %}{% endblock %}
 
     {% block tmpl %}
-    <!-- Generic -->
-    {% tmpl 'tmpl/modal.html' 'modal_tmpl' %}
-    {% tmpl 'tmpl/place_detail.html' 'place_tmpl' %}
-    {% tmpl 'tmpl/visit_detail.html' 'visit_tmpl' %}
-    {% tmpl 'tmpl/npc_interaction.html' 'npc_int_tmpl' %}
 
-    {% tmpl 'tmpl/acquisition.html' 'acquisition_tmpl' %}
-    {% tmpl 'tmpl/visitor.html' 'visitor_tmpl' %}
-    {% tmpl 'tmpl/pocket_item.html' 'pocketitem_tmpl' %}
-    {% tmpl 'tmpl/player_detail.html' 'playerdetail_tmpl' %}
     {% endblock %}
   </head>
     <body>
@@ -56,7 +47,7 @@
                         <ul class="historyList">
                         </ul>
                         <h2 class="historyCurrent">
-                            <a href="">Welcome to LAG</a>
+                            <a href="#nearby">Welcome to LAG</a>
                         </h2>
                     </div>
                     <div class="nav historyIterator">
@@ -99,7 +90,7 @@
                 <div class="navSkin modInnerSkin">
                     <ul class="nav line siteMap">
                         <li class="unit size1of4 siteMapEntry siteMapLocation">
-                            <a class="icon" id="location" href="#">
+                            <a class="icon" id="location" href="#visit">
                                 <span>
                                     Location
                                 </span>
@@ -138,7 +129,7 @@
                             </div>
                         </li>
                         <li class="unit size1of4 siteMapEntry siteMapArtifacts">
-                            <a class="icon" id="artifacts" href="#">
+                            <a class="icon" id="artifacts" href="#pocket">
                                 <span>
                                     Artifacts
                                 </span>
@@ -156,7 +147,7 @@
                             </div>
                         </li>
                         <li class="unit size1of4 siteMapEntry siteMapGamers">
-                            <a class="icon" id="gamers" href="#">
+                            <a class="icon" id="gamers" href="#newsfeed">
                                 <span>
                                     Gamers
                                 </span>

@@ -1,18 +1,24 @@
-  <p>{{ name }}
-    <a href="#" class="moreLess">...</a> <br />
-    <a href="#" class="visit">Visit</a>
+  <h2>
+    {{ name }}
+  </h2>
+  <p>
+    Created: {{ place_created }}
   </p>
-  <div class="placeStats">
-  <p>Created: {{ place_created }}</p>
-  <p>Visits: {{ visits }}</p>
-  <p>Unique visitors: {{ unique_visitors }}</p>
-  <p>Items Found: {{ items_found }}</p>
-    <p>
-      Current visitors: {{ current_visitors }}
-    </p>
-  <p>Notes on this place's <a href="#" class="viewWall" place_id={{id}}>
-      Wall:
-    </a>{{ wall }}</p>
-
-  </div>
-<hr />
+  <p>
+    Visits: {{ visits }}
+  </p>
+  <p>
+    Unique visitors: {{ unique_visitors }}
+  </p>
+  <p>
+    Items Found: {{ items_found }}
+  </p>
+  <p>
+    Current visitors: {{ current_visitors }}
+  </p>
+  <p>
+    Notes on this place's Wall: {{ wall }}
+  </p>
+  <p>
+    <a href="#visit/{{id}}">Visit</a>
+  </p>
