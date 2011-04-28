@@ -2,6 +2,16 @@
 
 {% load tmpl %}
 {% block tmpl %}
+
+    <script id="locationMenuTmpl" type="text/x-jquery-tmpl">
+      {% include 'tmpl/menu/locations.html' %}
+    </script>
+
+    <script id="artifactMenuTmpl" type="text/x-jquery-tmpl">
+      {% include 'tmpl/menu/artifacts.html' %}
+    </script>
+
+
     {% tmpl 'tmpl/modal.html'           'modalTmpl' %}
     {% tmpl 'tmpl/newsfeed.html'        'newsfeedTmpl' %}
     {% tmpl 'tmpl/newsitem.html'        'newsitemTmpl' %}

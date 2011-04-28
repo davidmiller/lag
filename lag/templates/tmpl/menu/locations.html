@@ -1,0 +1,22 @@
+                            <div class="subNavWrapper">
+                                <ul class="subNav">
+                                    <li>
+                                        <a href="#/visit" class="inactive">
+                                            <span>
+                                              {% templatetag openvariable %}if visit{% templatetag closevariable %}
+                                              You are currently visiting ${visit}
+                                              {% templatetag openvariable %}else{% templatetag closevariable %}
+                                                You aren't in any location
+                                              {% templatetag openvariable %}/if{% templatetag closevariable %}
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#nearby">
+                                            <span class="navDescriptor">
+                                                Nearby locations: ${nearby}
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>

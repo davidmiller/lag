@@ -202,8 +202,9 @@
                 text-indent: -999em;
         }
 
+        /* Only added to the DOM by tmpl() */
         .subNavWrapper {
-                display: none;
+                display: block;
         }
 
         .scrollingContents {

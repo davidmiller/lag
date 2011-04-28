@@ -35,8 +35,8 @@ var LAG = {
     // Containers for application components to be inserted into the
     // namespace
     models: {},
-    collections:{},
-    views: {},
+    collections: {},
+    views: {menu: {}},
     controllers: {},
     // Will hold initialised Models and Collections
     db: {},
@@ -187,6 +187,50 @@ LAG.collections.NPCList = Backbone.Collection.extend({
 //
 // Views
 //
+
+//
+// Let's put menus in their own namespace
+//
+
+
+// Location Menu
+LAG.views.menu.Location = Backbone.View.extend({
+    tagName: "div",
+    className: "menu",
+    template: $("#locationMenuTmpl"),
+
+    initialize: function(options){
+        _.bindAll(this, 'render');
+        this.params = options.params;
+    },
+
+    render: function(){
+        $(this.el).html(this.template.tmpl(this.params));
+        $("#LAG").html(this.el);
+        return this;
+    },
+
+});
+
+// Artifact Menu
+LAG.views.menu.Artifact = Backbone.View.extend({
+    tagName: "div",
+    className: "menu",
+    template: $("#artifactMenuTmpl"),
+
+    initialize: function(options){
+        _.bindAll(this, 'render');
+        this.params = options.params;
+    },
+
+    render: function(){
+        $(this.el).html(this.template.tmpl(this.params));
+        $("#LAG").html(this.el);
+        return this;
+    },
+
+});
+
 
 // Generic Views
 
@@ -513,6 +557,8 @@ LAG.views.AcquireItemView = Backbone.View.extend({
 LAG.controllers.App = Backbone.Controller.extend({
 
     routes: {
+        "locations": "locationMenu",
+        "artifacts": "artifactMenu",
         "newsfeed":  "newsFeed",
         "nearby":    "nearby",
         "place/:id": "place",
@@ -551,6 +597,33 @@ LAG.controllers.App = Backbone.Controller.extend({
         // We'll define a Visit on initialize - because if they don't
         // visit somewhere, then frankly what's the point.
         LAG.db.visit = new LAG.models.Visit;
+    },
+
+    // Menus
+    locationMenu: function(){
+        params = {
+            nearby: LAG.db.places.length
+        }
+        if(LAG.db.visit.place){
+            params.visit = LAG.db.visit.place.get('name');
+        }
+        var menuView = new LAG.views.menu.Location({params: params});
+        menuView.render();
+    },
+
+    artifactMenu: function(){
+        var renderView = function(){
+            params = {
+                itemCount: LAG.db.pocket.length
+            }
+            var menuView = new LAG.views.menu.Artifact({params: params});
+            menuView.render();
+        }
+        if(LAG.db.pocket.length == 0){
+            LAG.db.pocket.fetch({success: renderView});
+        }else{
+            renderView();
+        }
     },
 
     newsFeed: function(){
