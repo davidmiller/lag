@@ -563,7 +563,7 @@ LAG.controllers.App = Backbone.Controller.extend({
         "nearby":    "nearby",
         "place/:id": "place",
         "pocket":    "pocket",
-        "visit":     "visit",
+        "visiting":  "visit",
         "visit/:id": "visitPlace",
     },
 
