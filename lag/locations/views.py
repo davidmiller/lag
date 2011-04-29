@@ -54,7 +54,7 @@ def checkin(request):
     # in that area.
     to_json = []
     if acc < 200:
-        places = Place.objects.distance(point).order_by('distance')[:5]
+        places = Place.objects.distance(point).order_by('distance')[:7]
         try:
             place = places[0]
             to_json.append(place.stats(guess=True))
@@ -65,7 +65,7 @@ def checkin(request):
 
     else:
         area = (point, Distance(m=acc))
-        places = Place.objects.filter(point__distance_lte=area)[:5]
+        places = Place.objects.filter(point__distance_lte=area)[:7]
         def visitsort(x):
             try:
                 return x.visit_set.get(player=player).visits
