@@ -40,11 +40,39 @@ var LAG = {
     controllers: {},
     // Will hold initialised Models and Collections
     db: {},
-    // start the application
-    initialize: function(){
-        new LAG.controllers.App;
-        Backbone.history.start();
 
+    //
+    // Start the application
+    //
+    // It's a big old singleton. Which means that we have to initialize
+    // a whole bunch of internal state.
+    //
+    // Set up the collections in LAG.db
+    // Fill them with initial data
+    //
+    // The total lack of opportunities for dependency injection in this
+    // application startup pattern is somewhat worrying.
+    //
+    initialize: function(){
+        // We want NewsFeed items as the first thing the Player sees.
+        LAG.db.newsFeed = new LAG.collections.NewsFeed;
+        // Initialize the Geolocation positions Collection
+        LAG.db.positions = new LAG.collections.PositionList;
+        // Collection for nearby places
+        LAG.db.places = new LAG.collections.PlaceList;
+        // Get the Player's current position.
+        // Once we have it, let's get a list of nearby places.
+        LAG.db.positions.checkin(function(){
+            LAG.db.places.fetch(LAG.db.positions.last());
+        });
+        // Every player has a pocket
+        LAG.db.pocket = new LAG.collections.Pocket;
+        // We'll define a Visit on initialize - because if they don't
+        // visit somewhere, then frankly what's the point.
+        LAG.db.visit = new LAG.models.Visit;
+        new LAG.controllers.App;
+        new LAG.controllers.Visit;
+        Backbone.history.start();
     },
 }
 
@@ -563,40 +591,12 @@ LAG.controllers.App = Backbone.Controller.extend({
         "nearby":    "nearby",
         "place/:id": "place",
         "pocket":    "pocket",
-        "visiting":  "visit",
-        "visit/:id": "visitPlace",
     },
 
-    //
-    // It's a big old singleton. Which means that we have to initialize
-    // a whole bunch of internal state.
-    //
-    // Set up the collections in LAG.db
-    // Fill them with initial data
-    //
-    // The total lack of opportunities for dependency injection in this
-    // application startup pattern is somewhat worrying.
-    //
     initialize: function(){
         _.bindAll(this, 'newsFeed');
-        // We want NewsFeed items as the first thing the Player sees.
-        LAG.db.newsFeed = new LAG.collections.NewsFeed;
         // Fetch the top # from the server - renders async
         LAG.db.newsFeed.fetch({success: this.newsFeed});
-        // Initialize the Geolocation positions Collection
-        LAG.db.positions = new LAG.collections.PositionList;
-        // Collection for nearby places
-        LAG.db.places = new LAG.collections.PlaceList;
-        // Get the Player's current position.
-        // Once we have it, let's get a list of nearby places.
-        LAG.db.positions.checkin(function(){
-            LAG.db.places.fetch(LAG.db.positions.last());
-        });
-        // Every player has a pocket
-        LAG.db.pocket = new LAG.collections.Pocket;
-        // We'll define a Visit on initialize - because if they don't
-        // visit somewhere, then frankly what's the point.
-        LAG.db.visit = new LAG.models.Visit;
     },
 
     // Menus
@@ -654,6 +654,16 @@ LAG.controllers.App = Backbone.Controller.extend({
         var pocketView = new LAG.views.Pocket({collection: LAG.db.pocket});
         // Get the latest Pocket, then render the items
         LAG.db.pocket.fetch({success: pocketView.render});
+    },
+});
+
+// Visits get their own controller
+
+LAG.controllers.Visit = Backbone.Controller.extend({
+
+    routes: {
+        "visiting":  "visit",
+        "visit/:id": "visitPlace",
     },
 
     // Show the current visit
