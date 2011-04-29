@@ -1,0 +1,21 @@
+     <form id="newPlaceForm">
+        <p>
+          <label for="new_place">
+            Name:
+          </label>
+          <input type="text" name="new_place" value="" />
+        </p>
+        <p>
+          <label for="new_placetype">
+            Type:
+          </label>
+          <select id="new_placetype" name="new_placetype">
+            {% templatetag openvariable %}each placetypes{% templatetag closevariable %}
+            <option value="${$value.id}">${$value.name}</option>
+            {% templatetag openvariable %}/each{% templatetag closevariable %}
+          </select>
+        </p>
+        <p>
+          <a href="#" id="newPlace">Register</a>
+        </p>
+      </form>

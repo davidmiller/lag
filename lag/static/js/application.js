@@ -102,6 +102,9 @@ LAG.models.Location = Backbone.Model.extend({
 // Places - Nearby place with basic Place data
 LAG.models.Place = Backbone.Model.extend({});
 
+// PlaceTypes - Categories of place for when we're registering
+LAG.models.PlaceType = Backbone.Model.extend({});
+
 // Items - Held in the pocket
 LAG.models.Item = Backbone.Model.extend({});
 
@@ -178,9 +181,19 @@ LAG.collections.PlaceList = Backbone.Collection.extend({
         $.post('/locations/checkin/',
                position.toPOST(),
                function(data){
-                   LAG.db.places.add($.parseJSON(data));
+                   LAG.db.places.refresh($.parseJSON(data));
                });
     }
+});
+
+//
+// PlaceTypes
+//
+// This gets lazily initialized and fetched the first time we call
+// the addNewPlace controller
+//
+LAG.collections.PlaceTypeList = Backbone.Collection.extend({
+    url: '/locations/placetypes/'
 });
 
 // Pocket
@@ -398,6 +411,55 @@ LAG.views.Place = Backbone.View.extend({
     },
 });
 
+// Registering a new place
+LAG.views.AddPlace = Backbone.View.extend({
+    tagName: "div",
+    className: "addPlace",
+    template: $("#addPlaceTmpl"),
+
+    events: {
+        "click #newPlace": "registerPlace",
+    },
+
+    initialize: function(){
+        _.bindAll(this, 'render', 'registerPlace');
+    },
+
+    render: function(){
+        $("#LAG").html("");
+        $(this.el).html(this.template.tmpl({
+            placetypes: LAG.db.placetypes.toJSON()
+        }));
+        $("#LAG").append(this.el);
+        return this;
+    },
+
+    registerPlace: function(){
+        var name = this.$("input[name='new_place']").val();
+        var placetype = this.$("select#new_placetype").val();
+        var currentPos = LAG.db.positions.last();
+        // Lexical scoping nonsense
+        var addPlaceView = this;
+        var success = function(data){
+            // Refresh the nearby places collection
+            LAG.db.places.fetch(LAG.db.positions.last());
+            response = $.parseJSON(data);
+            messageView = new LAG.views.ModalView(
+                {message: response.message}
+            );
+            $("#modal").html(messageView.render().el);
+            addPlaceView.remove();
+               }
+        $.post("/locations/register-place/",
+               {name: name,
+                lat: currentPos.get('latitude'),
+                lon: currentPos.get('longitude'),
+                placetype: placetype},
+              success)
+    }
+});
+
+
 LAG.views.Pocket = Backbone.View.extend({
     tagName: "div",
     className: "pocket",
@@ -579,24 +641,35 @@ LAG.views.AcquireItemView = Backbone.View.extend({
 //
 // Controllers
 //
-// The main app controller here
+// Initially, functionality should go into LAG.controllers.App
+// Once we establish a logically seperable group of functionality
+// with 3-4 methods/routes, split into it's own separate Controller
+// & then add a call to initialize an instance in LAG.initialize
 //
 
+// The main app controller here
 LAG.controllers.App = Backbone.Controller.extend({
 
     routes: {
-        "locations": "locationMenu",
-        "artifacts": "artifactMenu",
-        "newsfeed":  "newsFeed",
-        "nearby":    "nearby",
-        "place/:id": "place",
-        "pocket":    "pocket",
+        "locations":  "locationMenu",
+        "artifacts":  "artifactMenu",
+        "newsfeed":   "newsFeed",
+        "nearby":     "nearby",
+        "place/add": "addPlace",
+        "place/:id":  "place",
+        "pocket":     "pocket",
     },
 
     initialize: function(){
-        _.bindAll(this, 'newsFeed');
+        _.bindAll(this, 'newsFeed', 'checkRoutes');
         // Fetch the top # from the server - renders async
-        LAG.db.newsFeed.fetch({success: this.newsFeed});
+        LAG.db.newsFeed.fetch({success: this.checkRoutes});
+    },
+
+    checkRoutes: function(){
+        if(Backbone.history.fragment == ""){
+            this.newsFeed();
+        }
     },
 
     // Menus
@@ -647,6 +720,21 @@ LAG.controllers.App = Backbone.Controller.extend({
         var place = LAG.db.places.get(id);
         var placeView = new LAG.views.Place({model: place});
         placeView.render();
+    },
+
+    // Register a new place
+    addPlace: function(){
+        var renderForm = function(){
+            var addPlaceView = new LAG.views.AddPlace;
+            addPlaceView.render();
+        }
+        // Let's get the placetypes if we don't have them already
+        if(!LAG.db.placetypes){
+            LAG.db.placetypes = new LAG.collections.PlaceTypeList;
+            LAG.db.placetypes.fetch({success: renderForm})
+        }else{
+            renderForm();
+        }
     },
 
     // What's in your pocket?

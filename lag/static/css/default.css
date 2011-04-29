@@ -355,7 +355,7 @@
                         }
 
                         #newPlaceForm {
-                            display: none;
+                            display: block;
                         }
 
                         .modalItem{

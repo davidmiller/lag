@@ -1,17 +1,4 @@
 
-        /** Register a new Place */
-        newPlace: function(){
-            var name = $("input[name='new_place']").val();
-            var placetype = $("select#new_placetype']").val();
-            $.post("/locations/register-place/",
-                   {name: name, lat: LAG.lat, lon: LAG.lon,
-                    placetype: placetype},
-                   function(data){
-                       confirmed_visit_response(data);
-                   });
-        },
-
-
         // Attempt to pickpocket someone
         pickpocket: function(element){
             var player_id = $(element).attr('player_id');

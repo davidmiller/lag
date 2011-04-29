@@ -21,21 +21,15 @@ from lag.items.models import Treasure, Artifact
 from lag.news.models import NewsItem, NewsType
 from lag.npcs.models import SoothSayer, Wizard, Doctor, Philosopher
 from lag.players.models import PocketArtifact, PocketTreasure
-from lag.utils.shortcuts import render_to
 
-@render_to('locations/place_detail.html')
-def place_detail(request, id):
+@login_required
+def place_types(request):
     """
-    Show the detail for a particular place
-
-    Arguments:
-    - `id`:
+    Return a JSON serialized queryset of all PlaceTypes
     """
-    place = get_object_or_404(Place, id=id)
-    nearby = Place.objects.distance(place.point,
-                                    field_name='point').order_by('distance')
-    return dict(place=place, nearby=nearby[1:3])
-
+    placetypes = PlaceType.objects.all()
+    serial = [{'name':p.name, 'id':p.pk} for p in placetypes]
+    return HttpResponse(json.dumps(serial))
 
 @login_required
 def checkin(request):
@@ -107,11 +101,7 @@ def register_place(request):
     visit.last_visited = date.today()
     visit.visits += 1
     visit.save()
-    params = dict(
-        name=name,
-        created_by="You, just now!",
-        player_visit_count=visit.visits
-        )
+    params = dict(message="%s Created by You!" % name)
     return HttpResponse(json.dumps(params))
 
 @login_required
